@@ -300,3 +300,8 @@
 5. 프론트엔드 개발 (Next.js와 Apollo Client를 사용한 페이지 및 컴포넌트 작성)
 6. 테스트 (Jest를 사용한 단위 테스트 및 통합 테스트 작성)
 7. 배포 (Next.js의 정적 사이트 생성 기능을 사용한 정적 파일 생성 및 호스팅, 서버 인프라 설정 및 배포)
+
+# **Localhost**
+
+- Client : http://localhost:3000/
+- Server : http://localhost:4000/
