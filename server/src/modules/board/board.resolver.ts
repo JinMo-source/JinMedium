@@ -7,7 +7,7 @@ export class BoardResolver {
   constructor(private readonly boardService: BoardService) {}
 
   //AllGetBoards
-  @Query((returns) => [BoardModel])
+  @Query((returns) => [BoardModel], { nullable: true })
   getAllBoards(): BoardModel[] {
     return this.boardService.getAllBoard();
   }
