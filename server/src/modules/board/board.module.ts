@@ -3,7 +3,8 @@ import { BoardResolver } from './board.resolver';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
-import { BoardService } from './board.service';
+import BoardService from './service/board.service';
+import BoardModel from './model/board.model';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { BoardService } from './board.service';
       sortSchema: true,
     }),
   ],
-  providers: [BoardResolver, BoardService],
+  providers: [BoardResolver, BoardService, BoardModel],
 })
 export class BoardModule {}

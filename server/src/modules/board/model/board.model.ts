@@ -2,7 +2,7 @@ import { Field, Int, ID, ObjectType } from '@nestjs/graphql';
 import Comment from './comment.model';
 
 @ObjectType()
-export class Board {
+export class BoardModel {
   @Field((type) => Int)
   id: string;
 
@@ -34,4 +34,4 @@ export class Board {
   createAt: Date;
 }
 
-export default Board;
+export default BoardModel;

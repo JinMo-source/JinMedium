@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-class Comment {
+class CommentModel {
   @Field((type) => Int)
   id: string;
 
@@ -12,4 +12,4 @@ class Comment {
   createAt: string;
 }
 
-export default Comment;
+export default CommentModel;
