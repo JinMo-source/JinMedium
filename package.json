@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "concurrently \"cd server && npm run start\" \"cd client && npm run dev\""
+    "dev": "concurrently \"cd server && npm run start:dev\" \"cd client && npm run dev\""
   },
   "author": "",
   "license": "ISC",
