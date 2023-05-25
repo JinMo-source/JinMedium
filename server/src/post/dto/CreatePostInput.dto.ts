@@ -1,5 +1,8 @@
-import { InputType } from '@nestjs/graphql';
-import { PostEntity } from '../entities/post.entity';
+import { InputType, ObjectType, Field } from '@nestjs/graphql';
+import { Post } from '../entities/post.entity';
 
-@InputType()
-export class createPostInput extends PostEntity {}
+@ObjectType()
+export class createPostInput extends Post {
+  @Field((type) => String)
+  test: string;
+}
