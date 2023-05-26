@@ -8,6 +8,10 @@ export class Board extends CoreEntity {
   @Field((type) => String)
   @Column()
   title: string;
+
+  @Field((type) => String)
+  @Column()
+  description: string;
 }
 
 //1. server - muetation CreatePost, AllPost

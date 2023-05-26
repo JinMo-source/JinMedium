@@ -1,9 +1,10 @@
-import { InputType, ObjectType, Field } from '@nestjs/graphql';
+import { InputType, ObjectType, Field, PickType } from '@nestjs/graphql';
 import { Board } from '../entities/board.entity';
-import { output } from 'src/common/dto/output.dto';
-
-@InputType()
-export class AllBoardInput extends Board {}
+import { CoreOutPut } from 'src/common/dto/core-output.dto';
+import { title } from 'process';
 
 @ObjectType()
-export class AllBoardOutput extends output {}
+export class AllBoardOutput extends CoreOutPut {
+  @Field((type) => [Board], { nullable: true })
+  boards?: Board[];
+}
