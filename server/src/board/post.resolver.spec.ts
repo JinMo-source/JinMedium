@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PostResolver } from './post.resolver';
+import { PostResolver } from './board.resolver';
 
 describe('PostResolver', () => {
   let resolver: PostResolver;

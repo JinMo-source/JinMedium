@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostModule } from './post/post.module';
-import { Post } from './post/entities/post.entity';
+import { BoardModule } from './board/board.module';
+import { Board } from './board/entities/board.entity';
 
 @Module({
   imports: [
-    PostModule,
+    BoardModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -15,7 +15,7 @@ import { Post } from './post/entities/post.entity';
       username: 'parkjinmo',
       password: 'qkrwlsah123',
       database: 'medium',
-      entities: [Post],
+      entities: [Board],
       synchronize: true,
       logging: true,
     }),
