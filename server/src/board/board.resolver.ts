@@ -1,7 +1,6 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { Board } from './entities/board.entity';
 import { BoardService } from './board.service';
-import { AllBoardOutput } from './dto/all-board.dto';
 import { CreateBoardInput, CreateBoardOutput } from './dto/create-board.dto';
 
 @Resolver((of) => Board)
@@ -9,8 +8,8 @@ export class BoardResolver {
   constructor(private readonly boardService: BoardService) {}
 
   @Query((returns) => [Board])
-  async allBoard(): Promise<AllBoardOutput> {
-    return this.boardService.AllBoard();
+  async getBoard(): Promise<Board[]> {
+    return this.boardService.getBoards();
   }
 
   @Mutation((returns) => CreateBoardOutput)
