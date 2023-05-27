@@ -1,9 +1,10 @@
 import { IsString } from 'class-validator';
 
-export class BoardDto {
+export class Board {
   @IsString()
   title: string;
 
   @IsString()
   description: string;
 }
+// PartialType
