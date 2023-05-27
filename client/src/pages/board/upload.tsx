@@ -1,22 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { CREATE_BOARD } from "../graphql/mutations";
-
-interface CreateBoardInput {
-  title: string;
-  description: string;
-}
-
-interface CreateBoardData {
-  createBoard: {
-    ok: boolean;
-    error?: string;
-  };
-}
-
-interface CreateBoardVariables {
-  input: CreateBoardInput;
-}
+import { CREATE_BOARD } from "../../graphql/query/boardQueries";
+import { CreateBoardData, CreateBoardVariables } from "../../graphql/type/api";
 
 const Upload = () => {
   const [title, setTitle] = useState("");

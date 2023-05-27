@@ -1,3 +1,4 @@
+import Board from "../components/board";
 export default function home() {
-  return <h1>hi</h1>;
+  return <Board />;
 }

@@ -8,3 +8,13 @@ export const CREATE_BOARD = gql`
     }
   }
 `;
+
+export const GET_BOARD = gql`
+  query {
+    getBoard {
+      id
+      title
+      description
+    }
+  }
+`;
