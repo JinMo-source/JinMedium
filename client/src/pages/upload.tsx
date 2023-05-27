@@ -1,14 +1,33 @@
+import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_BOARD } from "../graphql/mutations";
-import { useState } from "react";
+
+interface CreateBoardInput {
+  title: string;
+  description: string;
+}
+
+interface CreateBoardData {
+  createBoard: {
+    ok: boolean;
+    error?: string;
+  };
+}
+
+interface CreateBoardVariables {
+  input: CreateBoardInput;
+}
 
 const Upload = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const [createBoard] = useMutation(CREATE_BOARD);
+  const [createBoard] = useMutation<CreateBoardData, CreateBoardVariables>(
+    CREATE_BOARD
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const { data } = await createBoard({
         variables: {
@@ -18,7 +37,6 @@ const Upload = () => {
           },
         },
       });
-
       console.log(data);
     } catch (error) {
       console.error(error);
