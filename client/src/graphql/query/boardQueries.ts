@@ -23,7 +23,7 @@ export const GET_BOARD = gql`
 
 // Find Board ID Mutation
 export const EDIT_BOARD = gql`
-  mutation EditBoard($ID: FetchDataById!) {
+  query EditBoard($ID: FetchDataById!) {
     EditBoard(ID: $ID) {
       id
       title

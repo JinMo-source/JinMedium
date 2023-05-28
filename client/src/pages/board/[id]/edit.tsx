@@ -1,38 +1,45 @@
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 import { EDIT_BOARD } from "@/graphql/query/boardQueries";
-import { Board, FetchDataById } from "@/graphql/type/api";
+import { Board, FetchDataById, EditBoardData } from "@/graphql/type/api";
 
 function Edit() {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
   const router = useRouter();
   const URL = Number(router.query.id);
-  const [editBoard] = useMutation<Board, FetchDataById>(EDIT_BOARD);
-  const [edit, setEdit] = useState([]);
-  const fetchDataById = async () => {
-    try {
-      const { data } = await editBoard({
-        variables: {
-          ID: { id: URL },
-        },
-      });
-      console.log(data);
-      return data;
-    } catch (error) {
-      console.error(error);
+  const { loading, error, data } = useQuery<EditBoardData, FetchDataById>(
+    EDIT_BOARD,
+    {
+      variables: { ID: { id: URL } },
     }
+  );
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    console.log(error);
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
   };
-  useEffect(() => {
-    if (URL) {
-      fetchDataById();
-    }
-  }, [URL, editBoard]);
 
   return (
-    <div>
-      <h1>Edit {URL}</h1>
-      {/* 추가적인 컴포넌트 및 로직 */}
-    </div>
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        value={data?.EditBoard.title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <textarea
+        value={data?.EditBoard.description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      <button type="submit">Create Board</button>
+    </form>
   );
 }
 

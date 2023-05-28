@@ -11,6 +11,9 @@ export interface FetchDataByIdInput {
 export interface FetchDataById {
   ID: FetchDataByIdInput;
 }
+export interface EditBoardData {
+  EditBoard: Board!;
+}
 
 // Create Board
 export interface CreateBoardInput {
