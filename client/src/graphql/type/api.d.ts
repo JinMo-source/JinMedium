@@ -1,40 +1,40 @@
+// COMMON
 export interface Board {
-  id: number;
+  id?: number;
   title: string;
   description: string;
 }
 
-// FetchDataById
+// INPUT
+
+export interface BoardVariables {
+  input: Board;
+}
+
+// OUTPUT
+export interface CoreOutPut {
+  ok: boolean;
+  error?: string;
+}
+
+export interface BoardOutput {
+  Output: CoreOutPut;
+}
+
+// FIND BY Id
 export interface FetchDataByIdInput {
   id: number;
 }
 export interface FetchDataById {
   ID: FetchDataByIdInput;
 }
-export interface EditBoardData {
-  EditBoard: Board!;
+
+// Detail Board
+export interface Board_Fetch_Data_By_Id {
+  BoardFetchByDataId: Board!;
 }
 
-// Create Board
-export interface CreateBoardInput {
-  title: string;
-  description: string;
-}
-
-export interface CreateBoardData {
-  createBoard: {
-    ok: boolean;
-    error?: string;
-  };
-}
-
-export interface CreateBoardVariables {
-  input: CreateBoardInput;
-}
-
-//onst [createBoard] = useMutation<CreateBoardData, CreateBoardVariables>(
-// Get Board
-
+// All BOARD
 export interface GetBoardData {
   getBoard: [Board];
 }

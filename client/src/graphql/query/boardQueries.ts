@@ -1,15 +1,5 @@
 import { gql } from "@apollo/client";
 
-// Create Board Mutation
-export const CREATE_BOARD = gql`
-  mutation CreateBoard($input: CreateBoardInput!) {
-    createBoard(input: $input) {
-      ok
-      error
-    }
-  }
-`;
-
 // All Board Query
 export const GET_BOARD = gql`
   query {
@@ -22,9 +12,9 @@ export const GET_BOARD = gql`
 `;
 
 // Find Board ID Mutation
-export const EDIT_BOARD = gql`
-  query EditBoard($ID: FetchDataById!) {
-    EditBoard(ID: $ID) {
+export const BOARD_DFETCH_BY_DATA_ID = gql`
+  query BoardFetchByDataId($ID: FetchDataById!) {
+    BoardFetchByDataId(ID: $ID) {
       id
       title
       description

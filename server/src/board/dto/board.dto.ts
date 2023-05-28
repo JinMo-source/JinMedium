@@ -7,9 +7,9 @@ export class BoardInput {
   @Field((type) => Number, { nullable: true })
   id?: number;
   @Field((type) => String)
-  title?: string;
+  title: string;
   @Field((type) => String)
-  description?: string;
+  description: string;
 }
 
 @ObjectType()

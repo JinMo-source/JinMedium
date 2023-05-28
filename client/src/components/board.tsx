@@ -1,31 +1,58 @@
-import { Board, GetBoardData } from "../graphql/type/api";
-import { GET_BOARD } from "../graphql/query/boardQueries";
-import { useQuery } from "@apollo/client";
-import { format } from "date-fns";
+import { useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 import Link from "next/link";
 
-const Board = () => {
-  const { loading, error, data } = useQuery<GetBoardData>(GET_BOARD);
+import {
+  Board,
+  BoardOutput,
+  FetchDataById,
+  GetBoardData,
+} from "../graphql/type/api";
+import { GET_BOARD } from "../graphql/query/boardQueries";
+import { DELETE_BOARD } from "@/graphql/query/boardMutation";
+
+const BoardList = () => {
+  const [DeleteBoard] = useMutation<BoardOutput, FetchDataById>(DELETE_BOARD);
+  const { loading, error, data, refetch } = useQuery<GetBoardData>(GET_BOARD);
+
+  const handleRemove = async (id?: number) => {
+    if (id) {
+      try {
+        await DeleteBoard({
+          variables: { ID: { id } },
+        });
+        refetch();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   if (loading) {
     return <div>Loading</div>;
   }
 
   if (error) {
-    console.log(error);
+    return <div>Error occurred: {error.message}</div>;
   }
 
-  console.log(data?.getBoard);
   return (
     <ul>
       {data ? (
         data.getBoard.map((board: Board) => (
-          <Link key={board.id} href={`/board/${board.id}/edit`}>
-            <li key={board.id}>
-              제목 : {board.title}, <br />
-              내용 :{board.description}
-              <br />
-            </li>
-          </Link>
+          <div key={board.id} id={`${board.id}`}>
+            <Link href={`/board/${board.id}/edit`}>
+              <li>
+                제목: {board.title}, <br />
+                내용: {board.description}
+                <br />
+              </li>
+            </Link>
+            <Link href={`/board/${board.id}/edit`}>
+              <button>수정</button>
+            </Link>
+            <button onClick={() => handleRemove(board.id)}>삭제</button>
+          </div>
         ))
       ) : (
         <h2>Please wait for data</h2>
@@ -34,4 +61,4 @@ const Board = () => {
   );
 };
 
-export default Board;
+export default BoardList;

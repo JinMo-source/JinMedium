@@ -34,7 +34,7 @@ export class BoardResolver {
 
   @Mutation((returns) => BoardOutput)
   async DeleteBoard(
-    @Args('input') fetchDataById: FetchDataById,
+    @Args('ID') fetchDataById: FetchDataById,
   ): Promise<BoardOutput> {
     return this.boardService.DeleteBoard(fetchDataById);
   }
