@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Board } from './entities/board.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateBoardInput, CreateBoardOutput } from './dto/create-board.dto';
+import { BoardInput, BoardOutput } from './dto/board.dto';
 import { FetchDataById } from './dto/fetchDataById';
 
 @Injectable()
@@ -16,10 +16,7 @@ export class BoardService {
     return this.boardRepository.find();
   }
 
-  async CreateBoard({
-    title,
-    description,
-  }: CreateBoardInput): Promise<CreateBoardOutput> {
+  async CreateBoard({ title, description }: BoardInput): Promise<BoardOutput> {
     await this.boardRepository.save({ title, description });
     try {
       return {
@@ -33,15 +30,43 @@ export class BoardService {
     }
   }
 
-  async EditBoard({ id }: FetchDataById): Promise<Board | undefined> {
+  async BoardFetchByDataId({ id }: FetchDataById): Promise<Board | undefined> {
     const DetailBoard = await this.boardRepository.findOne({ where: { id } });
+
     if (DetailBoard) {
       return DetailBoard;
-    } else {
-      return undefined;
+    }
+  }
+
+  async EditBoard({
+    id,
+    title,
+    description,
+  }: BoardInput): Promise<BoardOutput> {
+    await this.boardRepository.update(id, { title, description });
+    try {
+      return {
+        ok: true,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: 'Could not load boards',
+      };
+    }
+  }
+
+  async DeleteBoard({ id }: FetchDataById): Promise<BoardOutput> {
+    await this.boardRepository.delete({ id });
+    try {
+      return {
+        ok: true,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: 'Could not load boards',
+      };
     }
   }
 }
-
-// 수정 페이지?
-// Detail?

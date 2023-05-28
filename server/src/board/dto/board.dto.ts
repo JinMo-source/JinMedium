@@ -1,10 +1,16 @@
-import { IsString } from 'class-validator';
+import { InputType, ObjectType, Field } from '@nestjs/graphql';
 
-export class Board {
-  @IsString()
-  title: string;
+import { CoreOutPut } from 'src/common/dto/core-output.dto';
 
-  @IsString()
-  description: string;
+@InputType()
+export class BoardInput {
+  @Field((type) => Number, { nullable: true })
+  id?: number;
+  @Field((type) => String)
+  title?: string;
+  @Field((type) => String)
+  description?: string;
 }
-// PartialType
+
+@ObjectType()
+export class BoardOutput extends CoreOutPut {}
