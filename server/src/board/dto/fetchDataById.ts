@@ -1,6 +1,6 @@
-import { Field, ID, InputType, ObjectType, extend } from '@nestjs/graphql';
+import { Field, ID, InputType, ObjectType } from '@nestjs/graphql';
 import { PickType } from '@nestjs/swagger';
-import { Board } from './board.dto';
+import { BoardInput } from './board.dto';
 
 @InputType()
 export class FetchDataById {
@@ -9,7 +9,7 @@ export class FetchDataById {
 }
 
 @ObjectType()
-export class FetchDataByIdOutPut extends PickType(Board, [
+export class FetchDataByIdOutPut extends PickType(BoardInput, [
   'title',
   'description',
 ]) {}
