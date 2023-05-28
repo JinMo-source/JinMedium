@@ -21,7 +21,7 @@ export class BoardResolver {
   }
 
   @Mutation((returns) => Board)
-  async EditBoard(@Args('ID') fetchDataById: FetchDataById) {
+  async EditBoard(@Args('ID') fetchDataById: FetchDataById): Promise<Board> {
     return this.boardService.EditBoard(fetchDataById);
   }
 }

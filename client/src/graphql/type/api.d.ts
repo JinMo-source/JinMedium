@@ -1,4 +1,18 @@
-// Cfreate Board
+export interface Board {
+  id: number;
+  title: string;
+  description: string;
+}
+
+// FetchDataById
+export interface FetchDataByIdInput {
+  id: number;
+}
+export interface FetchDataById {
+  ID: FetchDataByIdInput;
+}
+
+// Create Board
 export interface CreateBoardInput {
   title: string;
   description: string;
@@ -14,13 +28,10 @@ export interface CreateBoardData {
 export interface CreateBoardVariables {
   input: CreateBoardInput;
 }
+
+//onst [createBoard] = useMutation<CreateBoardData, CreateBoardVariables>(
 // Get Board
-export interface GetBoard {
-  id: number;
-  title: string;
-  description: string;
-}
 
 export interface GetBoardData {
-  getBoard: [GetBoard];
+  getBoard: [Board];
 }
