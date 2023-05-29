@@ -58,7 +58,7 @@
 
 ### Database
 
-- PostgreSQL
+- boardgreSQL
 
 ### Front Testing Stack
 
@@ -210,48 +210,48 @@
 
 ### **글 작성 및 편집**
 
-- 글 작성: `/posts/create`
-- 글 수정: `/posts/:postId/edit`
-- 글 삭제: `/posts/:postId/delete`
+- 글 작성: `/boards/create`
+- 글 수정: `/boards/:boardId/edit`
+- 글 삭제: `/boards/:boardId/delete`
 - 텍스트 편집기: `/editor`
 
 ### **글 목록 및 검색**
 
-- 최신 글 목록: `/posts`
-- 인기 글 목록: `/posts/popular`
+- 최신 글 목록: `/boards`
+- 인기 글 목록: `/boards/popular`
 - 태그별 글 목록: `/tags/:tag`
 - 검색 기능: `/search?q=:keyword`
 
 ### **좋아요 및 공유**
 
-- 글에 좋아요 표시: `/posts/:postId/like`
-- 글 공유: `/posts/:postId/share`
+- 글에 좋아요 표시: `/boards/:boardId/like`
+- 글 공유: `/boards/:boardId/share`
 
 ### **댓글 및 토론**
 
-- 댓글 작성: `/posts/:postId/comments/create`
-- 댓글 삭제: `/posts/:postId/comments/:commentId/delete`
-- 댓글에 대한 답글 작성: `/posts/:postId/comments/:commentId/reply`
-- 토론 기능: `/posts/:postId/discussion`
+- 댓글 작성: `/boards/:boardId/comments/create`
+- 댓글 삭제: `/boards/:boardId/comments/:commentId/delete`
+- 댓글에 대한 답글 작성: `/boards/:boardId/comments/:commentId/reply`
+- 토론 기능: `/boards/:boardId/discussion`
 
 ### **프로필 관리**
 
 - 프로필 정보 표시: `/profile`
 - 프로필 수정: `/profile/edit`
-- 작성한 글 목록: `/profile/posts`
-- 좋아요한 글 목록: `/profile/liked-posts`
+- 작성한 글 목록: `/profile/boards`
+- 좋아요한 글 목록: `/profile/liked-boards`
 
 ### **태그 및 카테고리**
 
-- 글에 태그 부여: `/posts/:postId/tags/create`
-- 글 카테고리 지정: `/posts/:postId/category/set`
+- 글에 태그 부여: `/boards/:boardId/tags/create`
+- 글 카테고리 지정: `/boards/:boardId/category/set`
 - 태그별 글 필터링: `/tags/:tag`
 - 카테고리별 글 필터링: `/categories/:category`
 
 ### **알림 및 구독**
 
 - 알림 설정: `/notifications/settings`
-- 팔로우한 작가의 글 알림: `/notifications/followed-authors-posts`
+- 팔로우한 작가의 글 알림: `/notifications/followed-authors-boards`
 - 작가 구독: `/authors/:authorId/subscribe`
 
 ### **팔로우 및 팔로워**
@@ -261,19 +261,19 @@
 
 ### **인기/추천 글**
 
-- 인기 글 표시: `/posts/popular`
-- 추천 글 표시: `/posts/recommended`
+- 인기 글 표시: `/boards/popular`
+- 추천 글 표시: `/boards/recommended`
 
 ### **북마크**
 
-- 글 북마크: `/posts/:postId/bookmark`
+- 글 북마크: `/boards/:boardId/bookmark`
 - 북마크한 글 목록: `/bookmarks`
 
 ### **통계 및 분석**
 
-- 글 조회수 통계: `/posts/:postId/stats/views`
-- 좋아요 수 통계: `/posts/:postId/stats/likes`
-- 댓글 수 통계: `/posts/:postId/stats/comments`
+- 글 조회수 통계: `/boards/:boardId/stats/views`
+- 좋아요 수 통계: `/boards/:boardId/stats/likes`
+- 댓글 수 통계: `/boards/:boardId/stats/comments`
 
 ### **권한 관리**
 
@@ -284,18 +284,18 @@
 ### **검색 및 필터링**
 
 - 키워드 검색: `/search?q=:keyword`
-- 필터 적용: `/posts/filter?category=:category&tag=:tag`
+- 필터 적용: `/boards/filter?category=:category&tag=:tag`
 
 ### **소셜 미디어 연동**
 
-- 글 소셜 미디어 공유: `/posts/:postId/social-share`
+- 글 소셜 미디어 공유: `/boards/:boardId/social-share`
 - 소셜 미디어 계정 연동: `/social-media/connect`
 
 # **Sequence of tasks**
 
 1. UI/UX 디자인
 2. 프로젝트 설정 (Next.js 및 TypeScript 설정, Apollo Client 구성)
-3. 데이터 모델링 (PostgreSQL 데이터베이스 설정, TypeORM을 사용하여 데이터베이스 스키마 설계)
+3. 데이터 모델링 (boardgreSQL 데이터베이스 설정, TypeORM을 사용하여 데이터베이스 스키마 설계)
 4. 백엔드 개발 (Apollo Server 및 Nest.js를 사용한 GraphQL 스키마 작성 및 리졸버 구현,TypeORM을 사용하여 데이터베이스와의 상호 작용 구현)
 5. 프론트엔드 개발 (Next.js와 Apollo Client를 사용한 페이지 및 컴포넌트 작성)
 6. 테스트 (Jest를 사용한 단위 테스트 및 통합 테스트 작성)
