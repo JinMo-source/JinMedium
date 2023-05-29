@@ -42,5 +42,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
     BoardModule,
   ],
+  providers: [],
 })
 export class AppModule {}

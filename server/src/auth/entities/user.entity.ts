@@ -7,7 +7,9 @@ import {
   Matches,
 } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { InternalServerErrorException } from '@nestjs/common';
+import bcrypt from 'bcrypt';
 
 @Entity()
 @ObjectType()
@@ -37,6 +39,18 @@ export class User extends CoreEntity {
   @Field(() => String)
   @Column({ unique: true })
   email: string;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword(): Promise<void> {
+    if (this.password) {
+      try {
+        this.password = await bcrypt.hashPassword(this.password, 10);
+      } catch (error) {
+        throw new InternalServerErrorException();
+      }
+    }
+  }
 
   //   @Column()
   //   profile:
