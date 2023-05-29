@@ -5,6 +5,18 @@ export interface Board {
   description: string;
 }
 
+export interface UserInput {
+  username: string!;
+  password: string!;
+  email: string!;
+}
+
+export interface UserVariables {
+  input: User;
+}
+export interface UserOutput {
+  Output: CoreOutPut;
+}
 // INPUT
 
 export interface BoardVariables {

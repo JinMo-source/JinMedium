@@ -8,8 +8,8 @@ import {
   FetchDataById,
   GetBoardData,
 } from "../graphql/type/api";
-import { GET_BOARD } from "../graphql/query/boardQueries";
-import { DELETE_BOARD } from "@/graphql/query/boardMutation";
+import { GET_BOARD } from "../graphql/query/Queries";
+import { DELETE_BOARD } from "@/graphql/query/Mutation";
 
 const BoardList = () => {
   const [DeleteBoard] = useMutation<BoardOutput, FetchDataById>(DELETE_BOARD);

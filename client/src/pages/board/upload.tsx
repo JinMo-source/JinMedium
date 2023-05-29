@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { CREATE_BOARD } from "../../graphql/query/boardMutation";
+import { CREATE_BOARD } from "../../graphql/query/Mutation";
 import { Board, BoardVariables } from "../../graphql/type/api";
 
 const Upload = () => {

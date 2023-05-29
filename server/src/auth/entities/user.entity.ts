@@ -9,7 +9,7 @@ import {
 import { CoreEntity } from 'src/common/entities/core.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 @ObjectType()
@@ -30,7 +30,7 @@ export class User extends CoreEntity {
       message: '대소문자, 숫자, 특수문자를 최소 하나씩 포함해야 합니다.',
     },
   )
-  @Field(() => String)
+  @Field((type) => String)
   @Column({ select: false })
   password: string;
 
@@ -45,13 +45,20 @@ export class User extends CoreEntity {
   async hashPassword(): Promise<void> {
     if (this.password) {
       try {
-        this.password = await bcrypt.hashPassword(this.password, 10);
-      } catch (error) {
+        this.password = await bcrypt.hash(this.password, 10);
+      } catch (e) {
+        console.log(e);
         throw new InternalServerErrorException();
       }
     }
   }
-
-  //   @Column()
-  //   profile:
+  async checkPassword(aPassword: string): Promise<boolean> {
+    try {
+      const ok = await bcrypt.compare(aPassword, this.password);
+      return ok;
+    } catch (e) {
+      console.log(e);
+      throw new InternalServerErrorException();
+    }
+  }
 }

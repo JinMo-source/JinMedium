@@ -8,7 +8,7 @@ export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
   @Mutation(() => UserOutput)
-  async singUp(@Args('Input') userInput: UserInput): Promise<UserOutput> {
+  async signUp(@Args('input') userInput: UserInput): Promise<UserOutput> {
     const signUpService = await this.userService.signup(userInput);
     return signUpService;
   }

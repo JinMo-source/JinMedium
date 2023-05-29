@@ -1,14 +1,14 @@
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { BOARD_DFETCH_BY_DATA_ID } from "@/graphql/query/boardQueries";
+import { BOARD_DFETCH_BY_DATA_ID } from "@/graphql/query/Queries";
 import { BoardOutput, BoardVariables } from "../../../graphql/type/api";
 import {
   Board,
   FetchDataById,
   Board_Fetch_Data_By_Id,
 } from "@/graphql/type/api";
-import { EDIT_BOARD } from "@/graphql/query/boardMutation";
+import { EDIT_BOARD } from "@/graphql/query/Mutation";
 
 function Edit() {
   const [title, setTitle] = useState("");

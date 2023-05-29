@@ -30,4 +30,12 @@ export const DELETE_BOARD = gql`
   }
 `;
 
-//  DeleteBoard(input: FetchDataById!): BoardOutput!
+// signUp
+export const SiGNUP = gql`
+  mutation signUp($input: UserInput!) {
+    signUp(input: $input) {
+      ok
+      error
+    }
+  }
+`;

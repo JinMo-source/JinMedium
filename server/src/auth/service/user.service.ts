@@ -19,18 +19,16 @@ export class UserService {
 
       if (!emailExist) {
         console.log('이메일이 존재하지 않습니다.');
-
-        await this.userRepository.save({
-          username,
-          password,
-          email,
-        });
+        await this.userRepository.save(
+          this.userRepository.create({ username, email, password }),
+        );
+        return { ok: true };
       } else {
         console.log('이메일이 이미 존재합니다.');
         return { ok: false, error: '이메일이 이미 존재합니다.' };
       }
     } catch (error) {
-      return { ok: false, error: '회원 가입에 실패했습니다.' };
+      return { ok: false, error: `회원 가입에 실패했습니다.${error.message}` };
     }
   }
 }
