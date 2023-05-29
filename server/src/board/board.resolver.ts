@@ -10,32 +10,42 @@ export class BoardResolver {
 
   @Query((returns) => [Board])
   async getBoard(): Promise<Board[]> {
-    return this.boardService.getBoards();
+    const GetBoards = await this.boardService.getBoards();
+    console.log(GetBoards);
+    return GetBoards;
   }
 
   @Mutation((returns) => BoardOutput)
   async CreateBoard(
     @Args('input') boardInput: BoardInput,
   ): Promise<BoardOutput> {
-    return this.boardService.CreateBoard(boardInput);
+    const Create = await this.boardService.CreateBoard(boardInput);
+    console.group(Create);
+    return Create;
   }
 
   @Query((returns) => Board)
   async BoardFetchByDataId(
     @Args('ID') fetchDataById: FetchDataById,
   ): Promise<Board> {
-    return this.boardService.BoardFetchByDataId(fetchDataById);
+    const FetchId = await this.boardService.BoardFetchByDataId(fetchDataById);
+    console.log(FetchId);
+    return FetchId;
   }
 
   @Mutation((returns) => BoardOutput)
   async EditBoard(@Args('input') boardInput: BoardInput): Promise<BoardOutput> {
-    return this.boardService.EditBoard(boardInput);
+    const Edit = await this.boardService.EditBoard(boardInput);
+    console.log(Edit);
+    return Edit;
   }
 
   @Mutation((returns) => BoardOutput)
   async DeleteBoard(
     @Args('ID') fetchDataById: FetchDataById,
   ): Promise<BoardOutput> {
-    return this.boardService.DeleteBoard(fetchDataById);
+    const Delete_board = await this.boardService.DeleteBoard(fetchDataById);
+    console.log(Delete_board);
+    return Delete_board;
   }
 }
