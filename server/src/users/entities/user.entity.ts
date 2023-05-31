@@ -1,5 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
+  IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsString,
@@ -40,6 +41,11 @@ export class User extends CoreEntity {
   @Column({ unique: true })
   email: string;
 
+  @Column({ default: false })
+  @Field((type) => Boolean)
+  @IsBoolean()
+  verified: boolean;
+
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword(): Promise<void> {
@@ -50,15 +56,6 @@ export class User extends CoreEntity {
         console.log(e);
         throw new InternalServerErrorException();
       }
-    }
-  }
-  async checkPassword(aPassword: string): Promise<boolean> {
-    try {
-      const ok = await bcrypt.compare(aPassword, this.password);
-      return ok;
-    } catch (e) {
-      console.log(e);
-      throw new InternalServerErrorException();
     }
   }
 }

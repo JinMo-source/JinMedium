@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/User.entity';
 import { Repository } from 'typeorm';
 import { UserInput, UserOutput } from '../dto/user.dto';
+import { MailerService } from '@nestjs-modules/mailer';
+import { Verification } from '../entities/verification.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private verifitions: Repository<Verification>,
   ) {}
 
   async signup({ username, password, email }: UserInput): Promise<UserOutput> {
@@ -19,9 +22,14 @@ export class UserService {
 
       if (!emailExist) {
         console.log('이메일이 존재하지 않습니다.');
-        await this.userRepository.save(
+        const User = await this.userRepository.save(
           this.userRepository.create({ username, email, password }),
         );
+
+        const verification = this.verifitions.save(
+          this.verifitions.create(User),
+        );
+        verification;
         return { ok: true };
       } else {
         console.log('이메일이 이미 존재합니다.');

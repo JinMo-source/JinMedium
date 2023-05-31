@@ -6,24 +6,30 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { BoardModule } from './board/board.module';
 import { Board } from './board/entities/board.entity';
-import { AuthModule } from './auth/auth.module';
-import { User } from './auth/entities/User.entity';
+import { UsersModule } from './users/users.module';
+import { User } from './users/entities/User.entity';
+
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
-    // ConfigModule.forRoot({
-    //   isGlobal: true,
-    //   envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env.test',
-    //   ignoreEnvFile: process.env.NODE_ENV === 'prod',
-    //   validationSchema: Joi.object({
-    //     NODE_ENV: Joi.string().valid('dev', 'prod').required(),
-    //     DB_HOST: Joi.string().required(),
-    //     DB_PORT: Joi.string().required(),
-    //     DB_USERNAME: Joi.string().required(),
-    //     DB_PASSWORD: Joi.string().required(),
-    //     DB_NAME: Joi.string().required(),
-    //   }),
-    // }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env.test',
+      ignoreEnvFile: process.env.NODE_ENV === 'prod',
+      validationSchema: Joi.object({
+        NODE_ENV: Joi.string().valid('dev', 'test', 'prod').required(),
+        DB_HOST: Joi.string().required(),
+        DB_PORT: Joi.string().required(),
+        DB_USERNAME: Joi.string().required(),
+        DB_PASSWORD: Joi.string().required(),
+        DB_NAME: Joi.string().required(),
+        MAILGUN_USER_NAME: Joi.string().required(),
+        MAILGUN_API_KEY: Joi.string().required(),
+        MAILGUN_TIMEOUT: Joi.number().required(),
+        MAILGUN_DOMAIN_NAME: Joi.string().required(),
+      }),
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -40,7 +46,28 @@ import { User } from './auth/entities/User.entity';
       autoSchemaFile: true,
       playground: true,
     }),
-    AuthModule,
+    MailerModule.forRoot({
+      // Mailgun 설정
+      transport: {
+        service: 'Mailgun',
+        auth: {
+          user: 'YOUR_MAILGUN_USERNAME',
+          pass: 'YOUR_MAILGUN_PASSWORD',
+        },
+      },
+    }),
+    MailerModule.forRoot({
+      transport: {
+        // Mailgun 설정
+        service: 'mailgun',
+        // Mailgun 설정
+        auth: {
+          apiKey: process.env.MAILGUN_API_KEY,
+          domain: process.env.MAILGUN_DOMAIN_NAME,
+        },
+      },
+    }),
+    UsersModule,
     BoardModule,
   ],
   providers: [],
