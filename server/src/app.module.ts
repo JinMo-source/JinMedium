@@ -8,8 +8,10 @@ import { BoardModule } from './board/board.module';
 import { Board } from './board/entities/board.entity';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/User.entity';
+import { Verification } from './users/entities/verification.entity';
 
 import { MailerModule } from '@nestjs-modules/mailer';
+import { MailgunService } from './mail/mail.service';
 
 @Module({
   imports: [
@@ -37,7 +39,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Board, User],
+      entities: [Board, User, Verification],
       synchronize: true,
       logging: true,
     }),
@@ -70,6 +72,6 @@ import { MailerModule } from '@nestjs-modules/mailer';
     UsersModule,
     BoardModule,
   ],
-  providers: [],
+  providers: [MailgunService],
 })
 export class AppModule {}
