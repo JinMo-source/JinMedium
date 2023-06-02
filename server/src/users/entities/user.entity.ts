@@ -1,16 +1,24 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import {
+  IsArray,
   IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsString,
   Length,
   Matches,
+  IsEnum,
 } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { Board } from 'src/board/entities/board.entity';
+
+enum UserRole {
+  admin = 'admin',
+  writer = 'writer',
+}
 
 @Entity()
 @ObjectType()
@@ -41,10 +49,19 @@ export class User extends CoreEntity {
   @Column({ unique: true })
   email: string;
 
+  @Field((type) => UserRole)
+  @Column()
+  @IsEnum(UserRole)
+  role: UserRole;
+
   @Column({ default: false })
   @Field((type) => Boolean)
   @IsBoolean()
   verified: boolean;
+
+  @OneToMany((type) => Board, (board) => board.writer, { cascade: true })
+  @IsArray()
+  board: Board[];
 
   @BeforeInsert()
   @BeforeUpdate()
@@ -57,5 +74,14 @@ export class User extends CoreEntity {
         throw new InternalServerErrorException();
       }
     }
+  }
+
+  async checkPassword(LoginPassword): Promise<boolean> {
+    const ok = await bcrypt.compare(LoginPassword, this.password);
+    return ok;
+  }
+  catch(error) {
+    console.log(error);
+    throw new InternalServerErrorException();
   }
 }

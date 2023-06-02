@@ -1,21 +1,31 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { Entity, Column } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { User } from 'src/users/entities/User.entity';
 
 @Entity()
 @ObjectType()
 export class Board extends CoreEntity {
-  @ApiProperty()
   @Field((type) => String)
+  @IsNotEmpty()
+  @IsString()
   @Column()
   title: string;
 
-  @ApiProperty()
   @Field((type) => String)
+  @IsNotEmpty()
+  @IsString()
   @Column()
   description: string;
-}
 
-//1. server - muetation CreatePost, AllPost
-//2. client - gql(mutation createPost,getPostAll)
+  @Field((type) => Array)
+  @IsArray()
+  @Column()
+  hashtag: [];
+
+  @ManyToOne((type) => User, (user) => user.board)
+  @JoinColumn()
+  @IsArray()
+  writer: User;
+}

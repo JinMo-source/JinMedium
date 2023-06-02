@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { UserInput, UserOutput } from '../dto/user.dto';
 import { Verification } from '../entities/verification.entity';
 import { MailgunService } from 'src/mail/mail.service';
+import { LoginInput, LoginOutput } from '../dto/login.dto';
+import { error } from 'console';
 
 @Injectable()
 export class UserService {
@@ -44,6 +46,29 @@ export class UserService {
       return { ok: false, error: `회원 가입에 실패했습니다.${error.message}` };
     }
   }
-}
 
-// Auth 내부 로직 :   추가 적인 개인수집,회원 가입 완료후 메일 보내기
+  async login({ email, password }: LoginInput): Promise<LoginOutput> {
+    try {
+      const user = await this.userRepository.findOne({ where: { email } });
+      if (!user) {
+        return {
+          ok: false,
+          error: '해당하는 유저가 없습니다.',
+        };
+      }
+      const passwordMatch = await user.checkPassword(password);
+      if (!passwordMatch) {
+        return {
+          ok: false,
+          error: '비밀번호가 틀렸습니다.',
+        };
+      }
+      return { ok: true };
+    } catch (error) {
+      return {
+        ok: false,
+        error: "Can't log user in.",
+      };
+    }
+  }
+}
