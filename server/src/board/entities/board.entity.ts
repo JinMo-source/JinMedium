@@ -19,13 +19,13 @@ export class Board extends CoreEntity {
   @Column()
   description: string;
 
-  @Field((type) => Array)
-  @IsArray()
-  @Column()
-  hashtag: [];
+  // @Field((type) => Array)
+  // @IsArray()
+  // @Column()
+  // hashtag: [];
 
-  @ManyToOne((type) => User, (user) => user.board)
-  @JoinColumn()
-  @IsArray()
-  writer: User;
+  // @ManyToOne((type) => User, (user) => user.board)
+  // @JoinColumn()
+  // @IsArray()
+  // writer: User;
 }

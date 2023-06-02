@@ -50,3 +50,13 @@ export interface Board_Fetch_Data_By_Id {
 export interface GetBoardData {
   getBoard: [Board];
 }
+
+// Login
+export interface LoginInput {
+  email: string;
+  password: string;
+}
+
+export interface LoginVariables {
+  input: LoginInput;
+}

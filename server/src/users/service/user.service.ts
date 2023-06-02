@@ -6,7 +6,6 @@ import { UserInput, UserOutput } from '../dto/user.dto';
 import { Verification } from '../entities/verification.entity';
 import { MailgunService } from 'src/mail/mail.service';
 import { LoginInput, LoginOutput } from '../dto/login.dto';
-import { error } from 'console';
 
 @Injectable()
 export class UserService {
@@ -49,7 +48,11 @@ export class UserService {
 
   async login({ email, password }: LoginInput): Promise<LoginOutput> {
     try {
-      const user = await this.userRepository.findOne({ where: { email } });
+      const user = await this.userRepository.findOne({
+        where: { email },
+        select: ['password'],
+      });
+
       if (!user) {
         return {
           ok: false,
@@ -67,7 +70,7 @@ export class UserService {
     } catch (error) {
       return {
         ok: false,
-        error: "Can't log user in.",
+        error: `에러가 발생했습니다: ${error.message}`,
       };
     }
   }

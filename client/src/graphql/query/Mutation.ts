@@ -39,3 +39,13 @@ export const SiGNUP = gql`
     }
   }
 `;
+
+//Login
+export const LOGIN = gql`
+  mutation Login($input: LoginInput!) {
+    Login(input: $input) {
+      ok
+      error
+    }
+  }
+`;

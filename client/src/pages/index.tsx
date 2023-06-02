@@ -9,6 +9,7 @@ export default function home() {
       </div>
       <div>
         <Link href={"/join"}>Join</Link>
+        <Link href={"/login"}>login</Link>
       </div>
     </div>
   );

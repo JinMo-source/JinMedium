@@ -49,19 +49,19 @@ export class User extends CoreEntity {
   @Column({ unique: true })
   email: string;
 
-  @Field((type) => UserRole)
-  @Column()
-  @IsEnum(UserRole)
-  role: UserRole;
+  // @Field((type) => UserRole)
+  // @Column()
+  // @IsEnum(UserRole)
+  // role: UserRole;
 
   @Column({ default: false })
   @Field((type) => Boolean)
   @IsBoolean()
   verified: boolean;
 
-  @OneToMany((type) => Board, (board) => board.writer, { cascade: true })
-  @IsArray()
-  board: Board[];
+  // @OneToMany((type) => Board, (board) => board.writer, { cascade: true })
+  // @IsArray()
+  // board: Board[];
 
   @BeforeInsert()
   @BeforeUpdate()
@@ -76,12 +76,13 @@ export class User extends CoreEntity {
     }
   }
 
-  async checkPassword(LoginPassword): Promise<boolean> {
-    const ok = await bcrypt.compare(LoginPassword, this.password);
-    return ok;
-  }
-  catch(error) {
-    console.log(error);
-    throw new InternalServerErrorException();
+  async checkPassword(LoginPassword: string): Promise<boolean> {
+    try {
+      const ok = await bcrypt.compare(LoginPassword, this.password);
+      return ok;
+    } catch (error) {
+      console.log(error, 'entity');
+      throw new InternalServerErrorException();
+    }
   }
 }
