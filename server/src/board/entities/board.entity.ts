@@ -19,13 +19,12 @@ export class Board extends CoreEntity {
   @Column()
   description: string;
 
-  // @Field((type) => Array)
-  // @IsArray()
-  // @Column()
-  // hashtag: [];
+  @Field((type) => [String])
+  @Column({ type: 'varchar', array: true, nullable: true })
+  hashtag: string[];
 
-  // @ManyToOne((type) => User, (user) => user.board)
-  // @JoinColumn()
-  // @IsArray()
-  // writer: User;
+  @ManyToOne((type) => User, (user) => user.board)
+  @JoinColumn({ name: 'User_id' })
+  @IsArray()
+  writer: User;
 }

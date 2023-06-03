@@ -49,19 +49,19 @@ export class User extends CoreEntity {
   @Column({ unique: true })
   email: string;
 
-  // @Field((type) => UserRole)
-  // @Column()
-  // @IsEnum(UserRole)
-  // role: UserRole;
+  @Field((type) => UserRole)
+  @Column({ nullable: true })
+  @IsEnum(UserRole)
+  role: UserRole;
 
   @Column({ default: false })
   @Field((type) => Boolean)
   @IsBoolean()
   verified: boolean;
 
-  // @OneToMany((type) => Board, (board) => board.writer, { cascade: true })
-  // @IsArray()
-  // board: Board[];
+  @OneToMany((type) => Board, (board) => board.writer, { cascade: true })
+  @IsArray()
+  board: Board[];
 
   @BeforeInsert()
   @BeforeUpdate()
