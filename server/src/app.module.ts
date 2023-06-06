@@ -11,7 +11,8 @@ import { User } from './users/entities/User.entity';
 import { Verification } from './users/entities/verification.entity';
 
 import { MailerModule } from '@nestjs-modules/mailer';
-import { MailgunService } from './mail/mail.service';
+import { JwtAuthModule } from './jwt/jwt.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -71,7 +72,8 @@ import { MailgunService } from './mail/mail.service';
     }),
     UsersModule,
     BoardModule,
+    JwtAuthModule,
+    AuthModule,
   ],
-  providers: [MailgunService],
 })
 export class AppModule {}

@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 import { CoreOutPut } from 'src/common/dto/core-output.dto';
 
 @InputType()
-export class LoginInput {
+export class validateUser {
   @IsString()
   @IsNotEmpty()
   @Field((type) => String)
@@ -16,4 +16,4 @@ export class LoginInput {
 }
 
 @ObjectType()
-export class LoginOutput extends CoreOutPut {}
+export class validateUserOutput extends CoreOutPut {}
