@@ -1,9 +1,9 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { CoreOutPut } from 'src/common/dto/core-output.dto';
+import { CoreOutput } from '../../common/dto/core-output.dto';
 
 @InputType()
-export class validateUser {
+export class ValidateUser {
   @IsString()
   @IsNotEmpty()
   @Field((type) => String)
@@ -16,4 +16,7 @@ export class validateUser {
 }
 
 @ObjectType()
-export class validateUserOutput extends CoreOutPut {}
+export class ValidateUserOutput {
+  @Field((type) => String)
+  accessToken: string;
+}

@@ -40,7 +40,7 @@ export class User extends CoreEntity {
     },
   )
   @Field((type) => String)
-  @Column({ select: false })
+  @Column()
   password: string;
 
   @IsEmail()

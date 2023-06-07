@@ -6,7 +6,7 @@ import {
   Length,
   Matches,
 } from 'class-validator';
-import { CoreOutPut } from 'src/common/dto/core-output.dto';
+import { CoreOutput } from 'src/common/dto/core-output.dto';
 
 @InputType()
 export class UserInput {
@@ -37,4 +37,4 @@ export class UserInput {
   //   profile:
 }
 @ObjectType()
-export class UserOutput extends CoreOutPut {}
+export class UserOutput extends CoreOutput {}

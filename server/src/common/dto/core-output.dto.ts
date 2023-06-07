@@ -1,7 +1,7 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType()
-export class CoreOutPut {
+export class CoreOutput {
   @Field((type) => String, { nullable: true })
   error?: string;
 

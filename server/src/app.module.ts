@@ -6,12 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { BoardModule } from './board/board.module';
 import { Board } from './board/entities/board.entity';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './users/Users.module';
 import { User } from './users/entities/User.entity';
 import { Verification } from './users/entities/verification.entity';
 
 import { MailerModule } from '@nestjs-modules/mailer';
-import { JwtAuthModule } from './jwt/jwt.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -72,7 +71,6 @@ import { AuthModule } from './auth/auth.module';
     }),
     UsersModule,
     BoardModule,
-    JwtAuthModule,
     AuthModule,
   ],
 })

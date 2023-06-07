@@ -1,25 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/User.entity';
-import { UserService } from 'src/users/service/user.service';
-import { validateUser } from './dto/validateUser.dto';
+import { UserService } from '../users/service/user.service';
+import { ValidateUser } from './dto/validateUser.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser({ email, password }: validateUser): Promise<User | null> {
-    const user = await this.userService.findByEmail(email);
-    if (user && (await bcrypt.compare(password, user.password))) {
-      return user;
+  async validateUser(validateUser: ValidateUser): Promise<User | null> {
+    try {
+      const user = await this.userService.findByEmail(validateUser.email);
+      if (
+        user &&
+        (await bcrypt.compare(validateUser.password, user.password))
+      ) {
+        return user;
+      }
+      return null;
+    } catch (error) {
+      console.log(error);
     }
-    return null;
   }
 
   async validateUserByEmail(userEmail: string): Promise<User | null> {
@@ -30,9 +35,14 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User): Promise<{ accessToken: string }> {
-    const payload = { userEmail: user.email };
-    const accessToken = this.jwtService.sign(payload);
-    return { accessToken };
+  async login(validateUser: ValidateUser): Promise<{ accessToken: string }> {
+    const user = await this.validateUser(validateUser);
+    if (user) {
+      const payload = { userEmail: user.email };
+      const accessToken = this.jwtService.sign(payload);
+      return { accessToken };
+    }
+    // 사용자 인증 실패 시에는 예외 처리 등을 수행할 수 있습니다.
+    throw new Error('사용자 인증에 실패했습니다.');
   }
 }

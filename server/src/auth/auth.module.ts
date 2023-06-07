@@ -7,8 +7,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/User.entity';
 import { AuthResolver } from './auth.resolver';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from 'src/jwt/jwt.strategy';
-import { UsersModule } from 'src/users/users.module';
+import { JwtStrategy } from 'src/auth/jwt/jwt.strategy';
+import { UsersModule } from 'src/users/Users.module';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
@@ -16,10 +17,18 @@ import { UsersModule } from 'src/users/users.module';
     TypeOrmModule.forFeature([User]),
     PassportModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET_KEY,
+      secret: 'sldkvmnlksadnvklasdnv',
       signOptions: { expiresIn: '1d' },
     }),
   ],
-  providers: [AuthResolver, AuthService, LocalStrategy, JwtStrategy],
+  providers: [
+    AuthResolver,
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    UserService,
+    TypeOrmModule,
+  ],
+  controllers: [AuthController],
 })
 export class AuthModule {}

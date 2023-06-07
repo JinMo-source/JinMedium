@@ -1,6 +1,6 @@
 import { InputType, ObjectType, Field } from '@nestjs/graphql';
 
-import { CoreOutPut } from 'src/common/dto/core-output.dto';
+import { CoreOutput } from 'src/common/dto/core-output.dto';
 
 @InputType()
 export class BoardInput {
@@ -13,4 +13,4 @@ export class BoardInput {
 }
 
 @ObjectType()
-export class BoardOutput extends CoreOutPut {}
+export class BoardOutput extends CoreOutput {}
