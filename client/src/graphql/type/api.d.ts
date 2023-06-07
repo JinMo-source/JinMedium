@@ -60,3 +60,12 @@ export interface LoginInput {
 export interface LoginVariables {
   input: LoginInput;
 }
+
+export interface ValidateUser {
+  email: string!;
+  password: string!;
+}
+
+export interface AccessToken {
+  accessToken: string;
+}
