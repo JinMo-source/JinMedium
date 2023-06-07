@@ -67,5 +67,7 @@ export interface ValidateUser {
 }
 
 export interface AccessToken {
-  accessToken: string;
+  validateUser: {
+    accessToken: string;
+  };
 }

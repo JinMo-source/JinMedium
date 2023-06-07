@@ -1,5 +1,5 @@
 import { VALIDATEUSER } from "@/graphql/query/Mutation";
-import { LoginInput, LoginVariables } from "@/graphql/type/api";
+import { LoginInput, LoginVariables, AccessToken } from "@/graphql/type/api";
 import { useMutation } from "@apollo/client";
 
 import { useState } from "react";
@@ -8,7 +8,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [ValidateUser] = useMutation<LoginInput, LoginVariables>(VALIDATEUSER);
+  const [ValidateUser] = useMutation<AccessToken, LoginVariables>(VALIDATEUSER);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,7 +21,7 @@ export default function Login() {
           },
         },
       });
-      const token = data?.validateUser?.accessToken; // 토큰 추출
+      const token = data?.validateUser?.accessToken || ""; // 토큰 추출
       localStorage.setItem("accessToken", token);
     } catch (error) {
       console.log(error);
