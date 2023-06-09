@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 import {
   IsArray,
   IsBoolean,
@@ -15,11 +15,14 @@ import { InternalServerErrorException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Board } from '../../board/entities/board.entity';
 
-// enum UserRole {
-//   admin = 'admin',
-//   writer = 'writer',
-// }
+export enum UserRole {
+  admin = 'admin',
+  writer = 'writer',
+}
 
+registerEnumType(UserRole, {
+  name: 'UserRole',
+});
 @Entity()
 @ObjectType()
 export class User extends CoreEntity {
@@ -49,19 +52,19 @@ export class User extends CoreEntity {
   @Column({ unique: true })
   email: string;
 
-  // @Field((type) => UserRole)
-  // @Column({ nullable: true })
-  // @IsEnum(UserRole)
-  // role: UserRole;
+  @Field((type) => UserRole)
+  @Column({ nullable: true })
+  @IsEnum(UserRole)
+  role: UserRole;
 
   @Column({ default: false })
   @Field((type) => Boolean)
   @IsBoolean()
   verified: boolean;
 
-  // @OneToMany((type) => Board, (board) => board.writer, { cascade: true })
-  // @IsArray()
-  // board: Board[];
+  @OneToMany((type) => Board, (board) => board.writer, { cascade: true })
+  @IsArray()
+  board: Board[];
 
   @BeforeInsert()
   @BeforeUpdate()

@@ -3,14 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/User.entity';
 import { Repository } from 'typeorm';
 import { UserInput, UserOutput } from '../dto/user.dto';
-// import { Verification } from '../entities/verification.entity';
-// import { MailgunService } from 'src/mail/mail.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>, // @InjectRepository(Verification) // private readonly verifitions: Repository<Verification>, // private readonly mailgun: MailgunService,
+    private readonly userRepository: Repository<User>,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async signup({ username, password, email }: UserInput): Promise<UserOutput> {
@@ -20,17 +20,14 @@ export class UserService {
       });
 
       if (!emailExist) {
-        console.log('이메일이 존재하지 않습니다.');
+        // 이메일 도메인에 따라 Role 할당
+
         const savedUser = await this.userRepository.save(
-          await this.userRepository.create({ username, email, password }),
+          this.userRepository.create({ username, email, password }),
         );
 
-        // const verification = this.verifitions.create({ user: savedUser });
-        // const savedVerification = await this.verifitions.save(verification);
-        // await this.mailgun.sendEmail({
-        //   email: savedUser.email,
-        //   code: savedVerification.code,
-        // });
+        this.eventEmitter.emit('userSignedUp', savedUser);
+
         return { ok: true };
       } else {
         console.log('이메일이 이미 존재합니다.');
@@ -44,6 +41,15 @@ export class UserService {
   async findByEmail(email: string): Promise<User | null> {
     try {
       const user = await this.userRepository.findOne({ where: { email } });
+      return user || null;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async findById(id: number): Promise<User | null> {
+    try {
+      const user = await this.userRepository.findOne({ where: { id } });
       return user || null;
     } catch (error) {
       console.log(error);

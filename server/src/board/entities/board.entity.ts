@@ -23,8 +23,8 @@ export class Board extends CoreEntity {
   @Column({ type: 'varchar', array: true, nullable: true })
   hashtag: string[];
 
-  // @ManyToOne((type) => User, (user) => user.board)
-  // @JoinColumn({ name: 'User_id' })
-  // @IsArray()
-  // writer: User;
+  @ManyToOne((type) => User, (user) => user.board)
+  @JoinColumn({ name: 'User_id' })
+  @IsArray()
+  writer: User;
 }

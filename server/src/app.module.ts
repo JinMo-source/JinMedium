@@ -8,10 +8,11 @@ import { BoardModule } from './board/board.module';
 import { Board } from './board/entities/board.entity';
 import { UsersModule } from './users/Users.module';
 import { User } from './users/entities/User.entity';
-import { Verification } from './users/entities/verification.entity';
-
+import { Verification } from './mail/entities/verification.entity';
+import { MailModule } from './mail/mail.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './auth/auth.module';
+import { MailController } from './mail/mail.controller';
 
 @Module({
   imports: [
@@ -71,7 +72,9 @@ import { AuthModule } from './auth/auth.module';
     }),
     UsersModule,
     BoardModule,
+    MailModule,
     AuthModule,
   ],
+  controllers: [MailController],
 })
 export class AppModule {}
