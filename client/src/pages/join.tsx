@@ -1,7 +1,6 @@
 import { SiGNUP } from "@/graphql/query/Mutation";
 import { UserInput, UserVariables } from "@/graphql/type/api";
 import { useMutation } from "@apollo/client";
-
 import { useState } from "react";
 
 export default function Join() {
