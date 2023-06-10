@@ -21,8 +21,8 @@ export default function Login() {
           },
         },
       });
-      const token = data?.validateUser?.accessToken || ""; // 토큰 추출
-      localStorage.setItem("accessToken", token);
+      // const token = data?.validateUser?.accessToken || ""; // 토큰 추출
+      // localStorage.setItem("accessToken", token);
     } catch (error) {
       console.log(error);
     }

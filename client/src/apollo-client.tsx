@@ -1,5 +1,6 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { parseCookies } from "nookies"; // nookies 패키지 import
 
 const httpLink = createHttpLink({
   uri: "http://localhost:4000/graphql",
@@ -7,7 +8,9 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   // 헤더에 토큰을 추가
-  const accessToken = localStorage.getItem("accessToken");
+  const cookies = parseCookies(); // 쿠키 가져오기
+  const accessToken = cookies.accessToken;
+  console.log(accessToken);
   return {
     headers: {
       ...headers,
