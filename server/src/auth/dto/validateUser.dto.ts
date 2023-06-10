@@ -1,6 +1,5 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { CoreOutput } from '../../common/dto/core-output.dto';
 
 @InputType()
 export class ValidateUser {
@@ -17,6 +16,7 @@ export class ValidateUser {
 
 @ObjectType()
 export class ValidateUserOutput {
+  @IsString()
   @Field((type) => String)
   accessToken: string;
 }

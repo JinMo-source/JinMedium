@@ -38,8 +38,9 @@ export class AuthService {
   async login(validateUser: ValidateUser): Promise<{ accessToken: string }> {
     const user = await this.validateUser(validateUser);
     if (user) {
-      const payload = { userEmail: user.email };
+      const payload = { username: user.username, email: user.email };
       const accessToken = this.jwtService.sign(payload);
+      console.log(accessToken);
       return { accessToken };
     }
     // 사용자 인증 실패 시에는 예외 처리 등을 수행할 수 있습니다.
