@@ -7,6 +7,8 @@ import jwt from "jsonwebtoken";
 const Upload = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [hashtag, setHashtag] = useState("");
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
 
@@ -55,18 +57,20 @@ const Upload = () => {
   return (
     <div>
       <h1>Upload</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <button type="submit">Create Board</button>
-      </form>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <button type="submit">Create Board</button>
+        </form>
+      </div>
     </div>
   );
 };
