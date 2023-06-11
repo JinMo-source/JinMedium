@@ -1,6 +1,7 @@
 import { VALIDATEUSER } from "@/graphql/query/Mutation";
 import { LoginInput, LoginVariables, AccessToken } from "@/graphql/type/api";
 import { useMutation } from "@apollo/client";
+import { setCookie } from "nookies";
 
 import { useState } from "react";
 
@@ -21,8 +22,16 @@ export default function Login() {
           },
         },
       });
-      // const token = data?.validateUser?.accessToken || ""; // 토큰 추출
-      // localStorage.setItem("accessToken", token);
+      const accessToken = data?.validateUser.accessToken;
+      if (accessToken) {
+        const maxAgeInSeconds = 30 * 24 * 60 * 60;
+        setCookie(null, "accessToken", accessToken, {
+          maxAge: maxAgeInSeconds, // 쿠키의 유효 기간 (예: 30일)
+          path: "/", // 쿠키의 유효 경로
+          secure: true, // HTTPS에서만 쿠키 전송
+          sameSite: "strict", // SameSite 설정
+        });
+      }
     } catch (error) {
       console.log(error);
     }

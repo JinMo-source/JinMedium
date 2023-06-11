@@ -16,8 +16,8 @@ export class BoardService {
     return this.boardRepository.find();
   }
 
-  async CreateBoard({ title, description }: BoardInput): Promise<BoardOutput> {
-    await this.boardRepository.save({ title, description });
+  async CreateBoard(BoardInfo): Promise<BoardOutput> {
+    await this.boardRepository.save({ ...BoardInfo });
     try {
       return {
         ok: true,

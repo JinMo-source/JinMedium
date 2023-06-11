@@ -13,6 +13,7 @@ import { MailModule } from './mail/mail.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './auth/auth.module';
 import { MailController } from './mail/mail.controller';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { MailController } from './mail/mail.controller';
       autoSchemaFile: true,
       playground: true,
     }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     MailerModule.forRoot({
       // Mailgun 설정
       transport: {
