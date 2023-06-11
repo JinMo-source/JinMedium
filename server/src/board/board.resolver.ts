@@ -27,7 +27,7 @@ export class BoardResolver {
     @Context() context: any, // NestJS 컨텍스트 객체를 주입받음
   ): Promise<BoardOutput> {
     console.log('Current User:', user.id);
-    // console.log('Context:', context);
+    console.log('Context:', context);
     const { title, description } = boardInput;
     const BoardInfo = new Board();
     BoardInfo.title = title;
