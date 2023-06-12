@@ -11,24 +11,24 @@ export const CREATE_BOARD = gql`
 `;
 
 // Edit Board Mutation
-export const EDIT_BOARD = gql`
-  mutation EditBoard($input: BoardInput!) {
-    EditBoard(input: $input) {
-      ok
-      error
-    }
-  }
-`;
+// export const EDIT_BOARD = gql`
+//   mutation EditBoard($input: BoardInput!) {
+//     EditBoard(input: $input) {
+//       ok
+//       error
+//     }
+//   }
+// `;
 
-// Remove Board Mutation
-export const DELETE_BOARD = gql`
-  mutation DeleteBoard($ID: FetchDataById!) {
-    DeleteBoard(ID: $ID) {
-      ok
-      error
-    }
-  }
-`;
+// // Remove Board Mutation
+// export const DELETE_BOARD = gql`
+//   mutation DeleteBoard($ID: FetchDataById!) {
+//     DeleteBoard(ID: $ID) {
+//       ok
+//       error
+//     }
+//   }
+// `;
 
 // signUp
 export const SiGNUP = gql`

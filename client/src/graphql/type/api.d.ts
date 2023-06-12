@@ -1,8 +1,6 @@
 // COMMON
 export interface Board {
-  id?: number;
-  title: string;
-  description: string;
+  content: string;
 }
 
 export interface UserInput {
@@ -26,6 +24,7 @@ export interface BoardVariables {
 // OUTPUT
 export interface CoreOutPut {
   ok: boolean;
+  content?: string;
   error?: string;
 }
 
