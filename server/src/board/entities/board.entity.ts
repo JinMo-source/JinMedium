@@ -7,17 +7,11 @@ import { User } from '../../users/entities/User.entity';
 @Entity()
 @ObjectType()
 export class Board extends CoreEntity {
-  @Field((type) => String)
+  @Field((type) => String, { nullable: false })
   @IsNotEmpty()
   @IsString()
   @Column()
-  title: string;
-
-  @Field((type) => String)
-  @IsNotEmpty()
-  @IsString()
-  @Column()
-  description: string;
+  content: string;
 
   @Field((type) => [String])
   @Column({ type: 'varchar', array: true, nullable: true })

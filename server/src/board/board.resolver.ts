@@ -28,10 +28,11 @@ export class BoardResolver {
   ): Promise<BoardOutput> {
     console.log('Current User:', user.id);
     console.log('Context:', context);
-    const { title, description } = boardInput;
+
+    const { content } = boardInput;
     const BoardInfo = new Board();
-    BoardInfo.title = title;
-    BoardInfo.description = description;
+    BoardInfo.content = content;
+    console.log(content);
     BoardInfo.writer = user;
     const createResult = await this.boardService.CreateBoard(BoardInfo);
     if (createResult.ok) {
@@ -55,19 +56,19 @@ export class BoardResolver {
     return FetchId;
   }
 
-  @Mutation((returns) => BoardOutput)
-  async EditBoard(@Args('input') boardInput: BoardInput): Promise<BoardOutput> {
-    const Edit = await this.boardService.EditBoard(boardInput);
-    console.log(Edit);
-    return Edit;
-  }
+  // @Mutation((returns) => BoardOutput)
+  // // async EditBoard(@Args('input') boardInput: BoardInput): Promise<BoardOutput> {
+  // //   const Edit = await this.boardService.EditBoard(boardInput);
+  // //   console.log(Edit);
+  // //   return Edit;
+  // // }
 
-  @Mutation((returns) => BoardOutput)
-  async DeleteBoard(
-    @Args('ID') fetchDataById: FetchDataById,
-  ): Promise<BoardOutput> {
-    const Delete_board = await this.boardService.DeleteBoard(fetchDataById);
-    console.log(Delete_board);
-    return Delete_board;
-  }
+  // @Mutation((returns) => BoardOutput)
+  // async DeleteBoard(
+  //   @Args('ID') fetchDataById: FetchDataById,
+  // ): Promise<BoardOutput> {
+  //   const Delete_board = await this.boardService.DeleteBoard(fetchDataById);
+  //   console.log(Delete_board);
+  //   return Delete_board;
+  // }
 }

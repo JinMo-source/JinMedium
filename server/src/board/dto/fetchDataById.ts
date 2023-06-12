@@ -9,7 +9,4 @@ export class FetchDataById {
 }
 
 @ObjectType()
-export class FetchDataByIdOutPut extends PickType(BoardInput, [
-  'title',
-  'description',
-]) {}
+export class FetchDataByIdOutPut extends PickType(BoardInput, ['content']) {}

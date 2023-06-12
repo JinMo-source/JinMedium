@@ -21,6 +21,7 @@ export class BoardService {
     try {
       return {
         ok: true,
+        content: BoardInfo,
       };
     } catch (error) {
       return {
@@ -38,35 +39,31 @@ export class BoardService {
     }
   }
 
-  async EditBoard({
-    id,
-    title,
-    description,
-  }: BoardInput): Promise<BoardOutput> {
-    await this.boardRepository.update(id, { title, description });
-    try {
-      return {
-        ok: true,
-      };
-    } catch (error) {
-      return {
-        ok: false,
-        error: 'Could not load boards',
-      };
-    }
-  }
+  // async EditBoard({ content }: BoardInput): Promise<BoardOutput> {
+  //   await this.boardRepository.update({ content });
+  //   try {
+  //     return {
+  //       ok: true,
+  //     };
+  //   } catch (error) {
+  //     return {
+  //       ok: false,
+  //       error: 'Could not load boards',
+  //     };
+  //   }
+  // }
 
-  async DeleteBoard({ id }: FetchDataById): Promise<BoardOutput> {
-    await this.boardRepository.delete({ id });
-    try {
-      return {
-        ok: true,
-      };
-    } catch (error) {
-      return {
-        ok: false,
-        error: 'Could not load boards',
-      };
-    }
-  }
+  // async DeleteBoard({ id }: FetchDataById): Promise<BoardOutput> {
+  //   await this.boardRepository.delete({ id });
+  //   try {
+  //     return {
+  //       ok: true,
+  //     };
+  //   } catch (error) {
+  //     return {
+  //       ok: false,
+  //       error: 'Could not load boards',
+  //     };
+  //   }
+  // }
 }
