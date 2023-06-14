@@ -1,10 +1,14 @@
 import dynamic from "next/dynamic";
 import { useMutation } from "@apollo/client";
 import { CREATE_BOARD } from "@/graphql/query/Mutation";
-import { Board, BoardVariables } from "@/graphql/type/api";
+import {
+  Operation,
+  OperationOps,
+  OperationInput,
+  Board,
+} from "@/graphql/type/api";
 import { useState } from "react";
 import "react-quill/dist/quill.snow.css";
-import Delta from "quill-delta";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -12,16 +16,48 @@ const ReactQuill = dynamic(() => import("react-quill"), {
 
 const TextEditor = () => {
   const [content, setContent] = useState<string>("");
-  const [createBoard] = useMutation<Board, BoardVariables>(CREATE_BOARD);
-  const [delta, setDelta] = useState(null);
+  const [CreateBoard] = useMutation<Board, OperationInput>(CREATE_BOARD);
 
   const handleSendClick = async () => {
     try {
-      const { data } = await createBoard({
+      if (!content) {
+        console.log("Content is undefined");
+        return;
+      }
+
+      const deltaOps: OperationOps = {
+        ops: JSON.parse(JSON.stringify(content)).ops,
+      };
+
+      const delta: Operation[] = deltaOps.ops
+        .map((item: any) => {
+          const insertValue =
+            typeof item.insert === "string"
+              ? { insertString: item.insert }
+              : { insertObject: item.insert };
+
+          return {
+            insert: insertValue,
+            delete: item.delete as number,
+            retain: item.retain as number,
+            attributes: item.attributes as { [key: string]: any },
+          };
+        })
+        .filter((item) => {
+          // undefined 값을 가진 속성을 필터링합니다.
+          const filteredItem = Object.fromEntries(
+            Object.entries(item).filter(([_, value]) => value !== undefined)
+          );
+
+          // 필터링된 객체가 빈 객체가 아닐 경우에만 반환합니다.
+          return Object.keys(filteredItem).length > 0;
+        }) as Operation[];
+
+      console.log(delta);
+
+      const { data } = await CreateBoard({
         variables: {
-          input: {
-            content,
-          },
+          delta: delta,
         },
       });
       console.log(data);
@@ -67,12 +103,6 @@ const TextEditor = () => {
     "video",
   ];
 
-  // const delta1 = new Delta()
-  //   .insert("Hello", { bold: true })
-  //   .insert(" World", { bold: true })
-  //   .insert(" ccc");
-  // console.log(delta1);
-
   const handleDeltaChange = (
     content: string,
     delta: any,
@@ -81,10 +111,6 @@ const TextEditor = () => {
   ) => {
     const currentDelta = editor.getContents();
     setContent(currentDelta);
-    // const currentDeltaLength = currentDelta.length();
-    // const prevDeltaLength = prevDelta.length();
-    // console.log(delta);
-    // console.log(prevDelta);
   };
 
   return (

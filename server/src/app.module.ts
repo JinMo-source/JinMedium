@@ -14,6 +14,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './auth/auth.module';
 import { MailController } from './mail/mail.controller';
 import { PassportModule } from '@nestjs/passport';
+import fastifyAdapter from '@as-integrations/fastify';
 
 @Module({
   imports: [

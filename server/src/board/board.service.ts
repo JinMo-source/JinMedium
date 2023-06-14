@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Board } from './entities/board.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BoardInput, BoardOutput } from './dto/board.dto';
-import { FetchDataById } from './dto/fetchDataById';
+import { OperationInput, BoardOutput } from './dto/board.dto';
+// import { FetchDataById } from './dto/fetchDataById';
 
 @Injectable()
 export class BoardService {
@@ -16,12 +16,11 @@ export class BoardService {
     return this.boardRepository.find();
   }
 
-  async CreateBoard(BoardInfo): Promise<BoardOutput> {
-    await this.boardRepository.save({ ...BoardInfo });
+  async CreateBoard(OperationInput): Promise<BoardOutput> {
+    await this.boardRepository.save({ ...OperationInput });
     try {
       return {
         ok: true,
-        content: BoardInfo,
       };
     } catch (error) {
       return {
@@ -31,13 +30,13 @@ export class BoardService {
     }
   }
 
-  async BoardFetchByDataId({ id }: FetchDataById): Promise<Board | undefined> {
-    const DetailBoard = await this.boardRepository.findOne({ where: { id } });
+  // async BoardFetchByDataId({ id }: FetchDataById): Promise<Board | undefined> {
+  //   const DetailBoard = await this.boardRepository.findOne({ where: { id } });
 
-    if (DetailBoard) {
-      return DetailBoard;
-    }
-  }
+  //   if (DetailBoard) {
+  //     return DetailBoard;
+  //   }
+  // }
 
   // async EditBoard({ content }: BoardInput): Promise<BoardOutput> {
   //   await this.boardRepository.update({ content });

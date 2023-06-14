@@ -1,7 +1,4 @@
 // COMMON
-export interface Board {
-  content: string;
-}
 
 export interface UserInput {
   username: string!;
@@ -17,20 +14,7 @@ export interface UserOutput {
 }
 // INPUT
 
-export interface BoardVariables {
-  input: Board;
-}
-
 // OUTPUT
-export interface CoreOutPut {
-  ok: boolean;
-  content?: string;
-  error?: string;
-}
-
-export interface BoardOutput {
-  Output: CoreOutPut;
-}
 
 // FIND BY Id
 export interface FetchDataByIdInput {
@@ -69,4 +53,25 @@ export interface AccessToken {
   validateUser: {
     accessToken: string;
   };
+}
+
+// BOARD
+export interface Board {
+  ok: boolean;
+  error?: string;
+}
+export interface Operation {
+  insert?: { [key: string]: any };
+  delete?: number;
+  retain?: number;
+  attributes?: { [key: string]: any };
+}
+
+export interface OperationOps {
+  ops: Array<{
+    Operation;
+  }>;
+}
+export interface OperationInput {
+  delta: Operation[];
 }

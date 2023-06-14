@@ -1,8 +1,8 @@
 import { Board } from './entities/board.entity';
 import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
 import { BoardService } from './board.service';
-import { BoardInput, BoardOutput } from './dto/board.dto';
-import { FetchDataById } from './dto/fetchDataById';
+import { OperationInput, BoardOutput } from './dto/board.dto';
+// import { FetchDataById } from './dto/fetchDataById';
 import { User } from 'src/users/entities/User.entity';
 import { GqlAuthGuard } from 'src/auth/gql-auth.guard';
 import { Request, UseGuards } from '@nestjs/common';
@@ -22,19 +22,15 @@ export class BoardResolver {
   @Mutation((returns) => BoardOutput)
   @UseGuards(GqlAuthGuard) // GraphQL 요청에 대해 인증을 검사하는 Guard 적용
   async CreateBoard(
-    @Args('input') boardInput: BoardInput,
+    @Args('delta') operationInput: OperationInput,
     @CurrentUser() user: User, // 현재 인증된 사용자 정보를 주입받음
     @Context() context: any, // NestJS 컨텍스트 객체를 주입받음
   ): Promise<BoardOutput> {
     console.log('Current User:', user.id);
     console.log('Context:', context);
+    console.log(operationInput);
 
-    const { content } = boardInput;
-    const BoardInfo = new Board();
-    BoardInfo.content = content;
-    console.log(content);
-    BoardInfo.writer = user;
-    const createResult = await this.boardService.CreateBoard(BoardInfo);
+    const createResult = await this.boardService.CreateBoard(operationInput);
     if (createResult.ok) {
       return {
         ok: true,
@@ -47,14 +43,14 @@ export class BoardResolver {
     }
   }
 
-  @Query((returns) => Board)
-  async BoardFetchByDataId(
-    @Args('ID') fetchDataById: FetchDataById,
-  ): Promise<Board> {
-    const FetchId = await this.boardService.BoardFetchByDataId(fetchDataById);
-    console.log(FetchId);
-    return FetchId;
-  }
+  // @Query((returns) => Board)
+  // async BoardFetchByDataId(
+  //   @Args('ID') fetchDataById: FetchDataById,
+  // ): Promise<Board> {
+  //   const FetchId = await this.boardService.BoardFetchByDataId(fetchDataById);
+  //   console.log(FetchId);
+  //   return FetchId;
+  // }
 
   // @Mutation((returns) => BoardOutput)
   // // async EditBoard(@Args('input') boardInput: BoardInput): Promise<BoardOutput> {
