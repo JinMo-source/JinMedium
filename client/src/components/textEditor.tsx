@@ -43,15 +43,19 @@ const TextEditor = () => {
             attributes: item.attributes as { [key: string]: any },
           };
         })
-        .filter((item) => {
+        .reduce((filteredDelta: Operation[], item: Operation) => {
           // undefined 값을 가진 속성을 필터링합니다.
           const filteredItem = Object.fromEntries(
             Object.entries(item).filter(([_, value]) => value !== undefined)
           );
 
-          // 필터링된 객체가 빈 객체가 아닐 경우에만 반환합니다.
-          return Object.keys(filteredItem).length > 0;
-        }) as Operation[];
+          // 필터링된 객체가 빈 객체가 아닐 경우에만 추가합니다.
+          if (Object.keys(filteredItem).length > 0) {
+            filteredDelta.push(filteredItem);
+          }
+
+          return filteredDelta;
+        }, []);
 
       console.log(delta);
 
