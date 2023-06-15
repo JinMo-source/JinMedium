@@ -5,7 +5,7 @@ import { OperationInput, BoardOutput } from './dto/board.dto';
 // import { FetchDataById } from './dto/fetchDataById';
 import { User } from 'src/users/entities/User.entity';
 import { GqlAuthGuard } from 'src/auth/gql-auth.guard';
-import { Request, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/current-user.decorator';
 
 @Resolver((of) => Board)
@@ -22,15 +22,15 @@ export class BoardResolver {
   @Mutation((returns) => BoardOutput)
   @UseGuards(GqlAuthGuard) // GraphQL 요청에 대해 인증을 검사하는 Guard 적용
   async CreateBoard(
-    @Args('delta') operationInput: OperationInput,
+    @Args('input') operationInput: OperationInput,
     @CurrentUser() user: User, // 현재 인증된 사용자 정보를 주입받음
     @Context() context: any, // NestJS 컨텍스트 객체를 주입받음
   ): Promise<BoardOutput> {
-    console.log('Current User:', user.id);
-    console.log('Context:', context);
-    console.log(operationInput);
+    // console.log('Current User:', user.id);
+    // console.log('Context:', context);
+    const Board_Data = operationInput.ops;
 
-    const createResult = await this.boardService.CreateBoard(operationInput);
+    const createResult = await this.boardService.CreateBoard(Board_Data);
     if (createResult.ok) {
       return {
         ok: true,

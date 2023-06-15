@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 
 // Create Board Mutation
 export const CREATE_BOARD = gql`
-  mutation CreateBoard($delta: OperationInput!) {
-    CreateBoard(delta: $delta) {
+  mutation CreateBoard($input: OperationInput!) {
+    CreateBoard(input: $input) {
       ok
       error
     }

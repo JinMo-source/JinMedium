@@ -13,24 +13,12 @@ import { User } from '../../users/entities/User.entity';
 @Entity()
 @ObjectType()
 export class Board extends CoreEntity {
-  @IsString()
-  @Field(() => String, { nullable: true })
-  insert?: string;
+  @IsArray()
+  @Column('text', { array: true, nullable: true })
+  content: string[];
 
-  @IsNumber()
-  @Field(() => Number, { nullable: true })
-  delete?: number;
-
-  @IsNumber()
-  @Field(() => Number, { nullable: true })
-  retain?: number;
-
-  @IsObject()
-  @Field(() => String, { nullable: true })
-  attributes?: Record<string, any>;
-
+  @IsArray()
   @ManyToOne((type) => User, (user) => user.board)
   @JoinColumn({ name: 'User_id' })
-  @IsArray()
   writer: User;
 }

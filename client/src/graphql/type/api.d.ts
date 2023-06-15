@@ -60,18 +60,22 @@ export interface Board {
   ok: boolean;
   error?: string;
 }
+
+interface InsertInput {
+  insertString?: Record<string, any> | null;
+  insertObject?: Record<string, any> | null;
+}
+
 export interface Operation {
-  insert?: { [key: string]: any };
+  insert?: Record<string, any> | null;
   delete?: number;
   retain?: number;
-  attributes?: { [key: string]: any };
+  attributes?: Record<string, any> | null;
 }
 
 export interface OperationOps {
-  ops: Array<{
-    Operation;
-  }>;
+  ops: Operation[];
 }
 export interface OperationInput {
-  delta: Operation[];
+  input: OperationOps;
 }

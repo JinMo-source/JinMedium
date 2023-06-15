@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Board } from './entities/board.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OperationInput, BoardOutput } from './dto/board.dto';
+import { BoardOutput } from './dto/board.dto';
+import { ImageEntity } from './entities/image.entity';
 // import { FetchDataById } from './dto/fetchDataById';
 
 @Injectable()
@@ -10,14 +11,17 @@ export class BoardService {
   constructor(
     @InjectRepository(Board)
     private boardRepository: Repository<Board>,
+    private ImageRepository: Repository<ImageEntity>,
   ) {}
 
   async getBoards(): Promise<Board[]> {
     return this.boardRepository.find();
   }
 
-  async CreateBoard(OperationInput): Promise<BoardOutput> {
-    await this.boardRepository.save({ ...OperationInput });
+  async CreateBoard(Board_Data): Promise<BoardOutput> {
+    const Board_Data_Input = new Board();
+    console.log(Board_Data);
+    // await this.boardRepository.save({ ...Board_Data });
     try {
       return {
         ok: true,

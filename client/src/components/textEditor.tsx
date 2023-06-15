@@ -55,17 +55,19 @@ const TextEditor = () => {
           }
 
           return filteredDelta;
-        }, []);
+        }, []) as [Operation];
 
-      console.log(delta);
+      if (delta.length === 0) {
+        console.log("Delta array is empty");
+        return;
+      }
 
       const { data } = await CreateBoard({
         variables: {
-          delta: delta,
+          input: { ops: delta },
         },
       });
       console.log(data);
-      console.log(content);
     } catch (error) {
       console.log(error);
     }

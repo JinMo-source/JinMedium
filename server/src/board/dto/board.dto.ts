@@ -5,18 +5,18 @@ import { GraphQLJSONObject } from 'graphql-scalars';
 
 @InputType()
 class InsertInput {
-  @Field((type) => String, { nullable: true })
-  insertString?: string;
-
   @Field((type) => GraphQLJSONObject, { nullable: true })
-  insertObject?: Record<string, any>;
+  insertString?: Record<string, any>;
+
+  @Field((type) => String, { nullable: true })
+  insertObject?: string;
 }
 
 @InputType()
 export class Operation {
   @IsOptional()
-  @Field(() => InsertInput, { nullable: true })
-  insert?: InsertInput;
+  @Field(() => GraphQLJSONObject, { nullable: true })
+  insert?: Record<string, any>;
 
   @IsOptional()
   @IsNumber()
@@ -36,8 +36,8 @@ export class Operation {
 
 @InputType()
 export class OperationInput {
-  @Field(() => [Operation])
-  ops: OperationInput[];
+  @Field(() => [Operation], { nullable: true })
+  ops: Operation;
 }
 
 @ObjectType()
