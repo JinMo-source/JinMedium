@@ -1,13 +1,12 @@
 // ImageEntity.ts
+import { CoreEntity } from 'src/common/entities/core.entity';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class ImageEntity {
+export class ImageEntity extends CoreEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('text')
-  imagePath: string;
-
-  // 다른 필드들을 추가로 정의할 수 있습니다.
+  @Column({ type: 'jsonb' })
+  imagePath: object[];
 }

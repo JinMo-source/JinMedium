@@ -1,7 +1,7 @@
 import { Board } from './entities/board.entity';
 import { Args, Mutation, Resolver, Query, Context } from '@nestjs/graphql';
 import { BoardService } from './board.service';
-import { OperationInput, BoardOutput } from './dto/board.dto';
+import { OperationInput, BoardOutput, Operation } from './dto/board.dto';
 // import { FetchDataById } from './dto/fetchDataById';
 import { User } from 'src/users/entities/User.entity';
 import { GqlAuthGuard } from 'src/auth/gql-auth.guard';
@@ -28,9 +28,13 @@ export class BoardResolver {
   ): Promise<BoardOutput> {
     // console.log('Current User:', user.id);
     // console.log('Context:', context);
-    const Board_Data = operationInput.ops;
+    const boardData = operationInput.ops as Operation[];
+    const User_Id = user.id;
 
-    const createResult = await this.boardService.CreateBoard(Board_Data);
+    const createResult = await this.boardService.CreateBoard(
+      boardData,
+      User_Id,
+    );
     if (createResult.ok) {
       return {
         ok: true,

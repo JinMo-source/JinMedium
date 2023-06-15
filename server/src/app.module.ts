@@ -15,6 +15,7 @@ import { AuthModule } from './auth/auth.module';
 import { MailController } from './mail/mail.controller';
 import { PassportModule } from '@nestjs/passport';
 import fastifyAdapter from '@as-integrations/fastify';
+import { ImageEntity } from './board/entities/image.entity';
 
 @Module({
   imports: [
@@ -42,7 +43,7 @@ import fastifyAdapter from '@as-integrations/fastify';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Board, User, Verification],
+      entities: [Board, ImageEntity, User, Verification],
       synchronize: true,
       logging: true,
     }),

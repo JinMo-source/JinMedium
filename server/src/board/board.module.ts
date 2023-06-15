@@ -4,9 +4,10 @@ import { BoardService } from './board.service';
 import { Board } from './entities/board.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BoardGateway } from 'src/websocket/websocket';
+import { ImageEntity } from './entities/image.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Board])],
+  imports: [TypeOrmModule.forFeature([Board, ImageEntity])],
   providers: [BoardResolver, BoardService, BoardGateway],
   exports: [BoardService],
 })
