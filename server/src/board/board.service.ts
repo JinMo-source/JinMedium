@@ -4,8 +4,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BoardOutput, Operation } from './dto/board.dto';
 import { ImageEntity } from './entities/image.entity';
-import { User } from 'src/users/entities/User.entity';
-// import { FetchDataById } from './dto/fetchDataById';
 
 @Injectable()
 export class BoardService {
@@ -52,10 +50,6 @@ export class BoardService {
       }
     }
 
-    // const imageId = await this.imageRepository.findOne({
-    //   where: { imagePath },
-    // });
-    // console.log(imageId);
     board.writer = User_Id;
     await this.boardRepository.save(board);
     return {
