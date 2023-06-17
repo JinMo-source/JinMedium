@@ -4,7 +4,7 @@ import { BoardService } from './board.service';
 import { Board } from './entities/board.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BoardGateway } from 'src/websocket/websocket';
-import { ImageEntity } from './entities/image.entity';
+import { ImageEntity } from '../image/entity/image.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Board, ImageEntity])],

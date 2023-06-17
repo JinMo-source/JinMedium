@@ -9,7 +9,7 @@ import {
   IsString,
 } from 'class-validator';
 import { User } from '../../users/entities/User.entity';
-import { ImageEntity } from './image.entity';
+import { ImageEntity } from '../../image/entity/image.entity';
 
 @Entity()
 @ObjectType()
