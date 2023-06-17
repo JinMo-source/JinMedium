@@ -52,7 +52,7 @@ export class BoardService {
 
     if (imagePaths) {
       const bucketName = 'jinmedium';
-      this.eventEmitter.emit('uploadImages', bucketName, images);
+      // this.eventEmitter.emit('uploadImages', bucketName, images);
     }
 
     const imageName = images.map((item) => {
@@ -70,7 +70,7 @@ export class BoardService {
     }
 
     board.writer = User_Id;
-    await this.boardRepository.save(board);
+    // await this.boardRepository.save(board);
     return {
       ok: true,
     };
