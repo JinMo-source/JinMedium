@@ -17,6 +17,7 @@ import { PassportModule } from '@nestjs/passport';
 import fastifyAdapter from '@as-integrations/fastify';
 import { ImageEntity } from './image/entity/image.entity';
 import { ImageModule } from './image/image.module';
+import { CombinedBoardModule } from './combined_board/combined_board.module';
 
 @Module({
   imports: [
@@ -80,6 +81,7 @@ import { ImageModule } from './image/image.module';
     MailModule,
     AuthModule,
     ImageModule,
+    CombinedBoardModule,
   ],
   controllers: [MailController],
 })

@@ -4,15 +4,6 @@ import { CoreOutput } from 'src/common/dto/core-output.dto';
 import { GraphQLJSONObject } from 'graphql-scalars';
 
 @InputType()
-class InsertInput {
-  @Field((type) => GraphQLJSONObject, { nullable: true })
-  insertString?: Record<string, any>;
-
-  @Field((type) => String, { nullable: true })
-  insertObject?: string;
-}
-
-@InputType()
 export class Operation {
   @IsOptional()
   @Field(() => GraphQLJSONObject, { nullable: true })
@@ -36,6 +27,11 @@ export class Operation {
 
 @InputType()
 export class OperationInput {
+  @IsString()
+  @Field((type) => String, { nullable: true })
+  title: string;
+
+  @IsObject()
   @Field(() => [Operation], { nullable: true })
   ops: Operation;
 }
