@@ -1,4 +1,10 @@
-import { IsOptional, IsString, IsNumber, IsObject } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  IsNumber,
+  IsObject,
+  IsArray,
+} from 'class-validator';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
 import { CoreOutput } from 'src/common/dto/core-output.dto';
 import { GraphQLJSONObject } from 'graphql-scalars';
@@ -28,12 +34,12 @@ export class Operation {
 @InputType()
 export class OperationInput {
   @IsString()
-  @Field((type) => String, { nullable: true })
+  @Field(() => String, { nullable: true })
   title: string;
 
-  @IsObject()
+  @IsArray()
   @Field(() => [Operation], { nullable: true })
-  ops: Operation;
+  ops: Operation[];
 }
 
 @ObjectType()
