@@ -12,10 +12,6 @@ export class CombinedBoard {
   @Field(() => String, { nullable: true })
   subTitle?: string;
 
-  @IsArray()
-  @Field(() => [String])
-  tags?: string[];
-
   @IsString()
   @Field(() => String, { nullable: true })
   imagePath?: string;
