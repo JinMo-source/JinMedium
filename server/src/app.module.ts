@@ -18,6 +18,7 @@ import fastifyAdapter from '@as-integrations/fastify';
 import { ImageEntity } from './image/entity/image.entity';
 import { ImageModule } from './image/image.module';
 import { CombinedBoardModule } from './combined_board/combined_board.module';
+import { CombinedBoardEntity } from './combined_board/entities/combined_board.entity';
 
 @Module({
   imports: [
@@ -45,7 +46,7 @@ import { CombinedBoardModule } from './combined_board/combined_board.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Board, ImageEntity, User, Verification],
+      entities: [Board, CombinedBoardEntity, ImageEntity, User, Verification],
       synchronize: true,
       logging: true,
     }),

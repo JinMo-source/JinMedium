@@ -14,7 +14,7 @@ export class CombinedBoard {
 
   @IsString()
   @Field(() => String, { nullable: true })
-  imagePaths?: string;
+  imagePath?: string;
 }
 
 @ObjectType()

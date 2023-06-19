@@ -76,6 +76,21 @@ export interface Operation {
 export interface OperationOps {
   ops: Operation[];
 }
+export interface OperationFinally {
+  title: string;
+  ops: Operation[];
+}
 export interface OperationInput {
-  input: OperationOps;
+  input: OperationFinally;
+}
+
+//Combined Board
+export interface CombinedBoardData {
+  title: string;
+  subTitle: string;
+  imagePath: string;
+}
+
+export interface CombinedBoardInput {
+  input: CombinedBoardData;
 }

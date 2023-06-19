@@ -1,5 +1,8 @@
 import { ChangeEvent, useState } from "react";
 import Image from "next/image";
+import { useMutation } from "@apollo/client";
+import { Board, CombinedBoardInput } from "@/graphql/type/api";
+import { COMBINED_BOARD } from "@/graphql/query/Mutation";
 
 type PreviewProps = {
   title: string;
@@ -18,6 +21,27 @@ const Preview = ({ title, images, handleSendClick }: PreviewProps) => {
   const [imageSelcet, setImageSelect] = useState<Array<any>>(images);
   const [addImage, setAddImage] = useState<boolean>(false);
 
+  const [CreateCombinedBoard] = useMutation<Board, CombinedBoardInput>(
+    COMBINED_BOARD
+  );
+
+  const handleCombinedSendClick = async () => {
+    try {
+      const { data } = await CreateCombinedBoard({
+        variables: {
+          input: {
+            title: previewTitle,
+            subTitle: previewSubtitle,
+            imagePath: previewImage,
+          },
+        },
+      });
+      await handleSendClick();
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPreviewTitle(event.target.value);
   };
@@ -50,6 +74,7 @@ const Preview = ({ title, images, handleSendClick }: PreviewProps) => {
     setTags((prevTags) => prevTags.filter((_, i) => i !== index));
   };
   const handleSelectImage = (image_src: string) => {
+    console.log(image_src);
     setPreviewImage(image_src);
   };
 
@@ -154,7 +179,7 @@ const Preview = ({ title, images, handleSendClick }: PreviewProps) => {
           </div>
         </form>
       </div>
-      <button onClick={handleSendClick}>Publish now</button>
+      <button onClick={handleCombinedSendClick}>Publish now</button>
     </div>
   );
 };

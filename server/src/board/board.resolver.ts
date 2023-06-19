@@ -28,10 +28,13 @@ export class BoardResolver {
   ): Promise<BoardOutput> {
     // console.log('Current User:', user.id);
     // console.log('Context:', context);
+    const boardTitle = operationInput.title as string;
     const boardData = operationInput.ops as Operation[];
     const User_Id = user.id;
 
+    console.log(boardData);
     const createResult = await this.boardService.CreateBoard(
+      boardTitle,
       boardData,
       User_Id,
     );

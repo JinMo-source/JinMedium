@@ -11,8 +11,23 @@ export class CombinedBoardResolver {
   async CreateCombinedBoard(
     @Args('input') combinedBoard: CombinedBoard,
   ): Promise<CombinedBoardOutput> {
-    const { title, subTitle, imagePaths } = combinedBoard;
-    // const combined_board = new Board();
-    return this.combinedBoardService.CreateCombinedBoard();
+    try {
+      const { title, subTitle, imagePath } = combinedBoard;
+
+      // await this.combinedBoardService.CreateCombinedBoard(title, subTitle);
+      await this.combinedBoardService.ComareCombinedImages(
+        title,
+        subTitle,
+        imagePath,
+      );
+      return {
+        ok: true,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: `${error}`,
+      };
+    }
   }
 }

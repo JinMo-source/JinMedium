@@ -9,7 +9,7 @@ import {
 } from "@/graphql/type/api";
 import { useState } from "react";
 import "react-quill/dist/quill.snow.css";
-import Preview from "./preview";
+import Preview from "./combinedBoard";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -29,7 +29,6 @@ const TextEditor = () => {
         console.log("Content is undefined");
         return;
       }
-
       const deltaOps: OperationOps = {
         ops: JSON.parse(JSON.stringify(content)).ops,
       };
@@ -67,14 +66,18 @@ const TextEditor = () => {
         return;
       }
 
+      console.log(delta);
       const { data } = await CreateBoard({
         variables: {
-          input: { ops: delta },
+          input: {
+            title: title,
+            ops: delta,
+          },
         },
       });
 
-      console.log(title);
-      console.log(data);
+      // console.log(title);
+      // console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -131,9 +134,8 @@ const TextEditor = () => {
       const imageData = item.insert.image;
       return imageData;
     });
-
-    setPreviewImages(image_src);
     setContent(currentDelta);
+    setPreviewImages(image_src);
   };
 
   const handlePreviewOpen = () => {
@@ -164,6 +166,7 @@ const TextEditor = () => {
             }
           />
         )}
+        <button onClick={handleSendClick}>Test</button>
         <button onClick={handlePreviewOpen}>Publish</button>
       </div>
       {check ? (

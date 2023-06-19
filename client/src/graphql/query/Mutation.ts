@@ -9,6 +9,15 @@ export const CREATE_BOARD = gql`
     }
   }
 `;
+// Combined Board
+export const COMBINED_BOARD = gql`
+  mutation CreateCombinedBoard($input: CombinedBoard!) {
+    CreateCombinedBoard(input: $input) {
+      ok
+      error
+    }
+  }
+`;
 
 // signUp
 export const SiGNUP = gql`

@@ -20,6 +20,6 @@ export class CombinedBoardEntity extends CoreEntity {
   imagePath: string;
 
   @OneToOne((type) => Board, { onDelete: 'CASCADE' })
-  @JoinColumn()
-  Board_Id: Board;
+  @JoinColumn({ name: 'Board_Id' })
+  Board: Board;
 }

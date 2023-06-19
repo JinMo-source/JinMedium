@@ -8,7 +8,7 @@ import { User } from '../../users/entities/User.entity';
 @ObjectType()
 export class Board extends CoreEntity {
   @IsString()
-  @Column()
+  @Column({ nullable: true })
   title: string;
 
   @IsArray()
