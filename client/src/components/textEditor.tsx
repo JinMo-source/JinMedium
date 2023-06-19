@@ -154,6 +154,7 @@ const TextEditor = () => {
           value={title}
           onChange={handleTitleChange}
           placeholder="Title"
+          required
         />
         {ReactQuill && (
           <ReactQuill

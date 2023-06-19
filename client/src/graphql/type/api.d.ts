@@ -94,3 +94,13 @@ export interface CombinedBoardData {
 export interface CombinedBoardInput {
   input: CombinedBoardData;
 }
+
+// Tags
+
+export interface GetTagsData {
+  tags: string[];
+}
+
+export interface GetTagsInput {
+  input: GetTagsData;
+}

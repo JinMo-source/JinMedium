@@ -1,8 +1,8 @@
 import { ChangeEvent, useState } from "react";
 import Image from "next/image";
 import { useMutation } from "@apollo/client";
-import { Board, CombinedBoardInput } from "@/graphql/type/api";
-import { COMBINED_BOARD } from "@/graphql/query/Mutation";
+import { Board, CombinedBoardInput, GetTagsInput } from "@/graphql/type/api";
+import { COMBINED_BOARD, GET_TAGS } from "@/graphql/query/Mutation";
 
 type PreviewProps = {
   title: string;
@@ -19,15 +19,16 @@ const Preview = ({ title, images, handleSendClick }: PreviewProps) => {
   const [tagValue, setTagValue] = useState<string>("");
   const [imageSelcetBoolean, setImageSelectBoolean] = useState<boolean>(false);
   const [imageSelcet, setImageSelect] = useState<Array<any>>(images);
-  const [addImage, setAddImage] = useState<boolean>(false);
 
   const [CreateCombinedBoard] = useMutation<Board, CombinedBoardInput>(
     COMBINED_BOARD
   );
+  const [GetTags] = useMutation<Board, GetTagsInput>(GET_TAGS);
 
   const handleCombinedSendClick = async () => {
     try {
-      const { data } = await CreateCombinedBoard({
+      console.log(typeof tags);
+      const createBoardResponse = await CreateCombinedBoard({
         variables: {
           input: {
             title: previewTitle,
@@ -36,8 +37,20 @@ const Preview = ({ title, images, handleSendClick }: PreviewProps) => {
           },
         },
       });
+      const createBoardData = createBoardResponse.data;
+
+      const getTagsResponse = await GetTags({
+        variables: {
+          input: {
+            tags: tags,
+          },
+        },
+      });
+      const getTagsData = getTagsResponse.data;
+      // console.log(createBoardData);
+      console.log(getTagsData);
+
       await handleSendClick();
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -51,10 +64,10 @@ const Preview = ({ title, images, handleSendClick }: PreviewProps) => {
   };
 
   const handleTagsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue: string = event.target.value;
+    const inputValue: string = event.target.value.trim();
     const inputPush: string = inputValue.split(",")[0];
     const character = ",";
-
+    console.log(tags);
     if (inputValue.includes(character)) {
       if (inputValue === ",") {
         setTagValue("");
@@ -89,7 +102,6 @@ const Preview = ({ title, images, handleSendClick }: PreviewProps) => {
         if (typeof imageSrc === "string") {
           const base64Image = { insert: { image: imageSrc } };
           setImageSelect((imageSelcet) => [...imageSelcet, base64Image]);
-          setAddImage(true);
         }
       };
 
@@ -145,6 +157,7 @@ const Preview = ({ title, images, handleSendClick }: PreviewProps) => {
             placeholder="Title"
             value={previewTitle}
             onChange={handleTitleChange}
+            required
           />
           <input
             type="text"

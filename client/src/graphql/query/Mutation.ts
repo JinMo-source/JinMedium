@@ -18,7 +18,15 @@ export const COMBINED_BOARD = gql`
     }
   }
 `;
-
+//Tags
+export const GET_TAGS = gql`
+  mutation GetTags($input: TagsInput!) {
+    GetTags(input: $input) {
+      ok
+      error
+    }
+  }
+`;
 // signUp
 export const SiGNUP = gql`
   mutation signUp($input: UserInput!) {
