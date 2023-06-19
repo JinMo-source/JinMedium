@@ -43,7 +43,7 @@ export class CombinedBoardService {
             ).map((item) => item[1]);
 
             combined.imagePath = matchedPaths[0];
-            combined.Board = Promise.resolve(board);
+            combined.board = Promise.resolve(board);
             await this.combinedBoardEntity.save(combined);
           } else {
             console.log('이미지 경로와 일치하는 값이 존재하지 않습니다.');
@@ -64,7 +64,7 @@ export class CombinedBoardService {
             images.push(file);
             // this.eventEmitter.emit('uploadImages', bucketName, images);
             combined.imagePath = file.originalname;
-            combined.Board = Promise.resolve(board);
+            combined.board = Promise.resolve(board);
             await this.combinedBoardEntity.save(combined);
           }
         },

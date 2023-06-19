@@ -6,16 +6,12 @@ import {
 } from '@aws-sdk/client-s3';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ImageEntity } from './entity/image.entity';
+
 @Injectable()
 export class ImageService {
   private s3: S3Client;
 
-  constructor(
-    private readonly eventEmitter: EventEmitter2,
-    @InjectRepository(ImageEntity)
-    private imageEntity: ImageEntity,
-  ) {
+  constructor(private readonly eventEmitter: EventEmitter2) {
     this.s3 = new S3Client({
       region: 'ap-northeast-2', // AWS 리전 정보
       credentials: {
