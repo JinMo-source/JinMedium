@@ -54,15 +54,6 @@ export class BoardService {
       return false; // 필터링 조건이 false인 경우에는 유효하지 않은 값으로 간주
     });
 
-    if (imagePaths) {
-      const bucketName = 'jinmedium';
-      const temporaryBoard = await this.boardRepository.save(board);
-      const Board_Id = temporaryBoard.id;
-
-      this.eventEmitter.emit('CompareBoardImages', compareImages, Board_Id);
-      // this.eventEmitter.emit('uploadImages', bucketName, images);
-    }
-
     const imageName = images.map((item) => {
       return item.originalname;
     });
@@ -76,6 +67,14 @@ export class BoardService {
         const boradImage = { ImagePaths: imageName };
         board.content.push(boradImage);
       }
+    }
+
+    if (imagePaths) {
+      const bucketName = 'jinmedium';
+      const Board = await this.boardRepository.save(board);
+
+      this.eventEmitter.emit('CompareBoardImages', compareImages, Board);
+      // this.eventEmitter.emit('uploadImages', bucketName, images);
     }
 
     await this.boardRepository.save(board);

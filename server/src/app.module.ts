@@ -15,10 +15,12 @@ import { AuthModule } from './auth/auth.module';
 import { MailController } from './mail/mail.controller';
 import { PassportModule } from '@nestjs/passport';
 import fastifyAdapter from '@as-integrations/fastify';
-import { ImageEntity } from './image/entity/image.entity';
 import { ImageModule } from './image/image.module';
 import { CombinedBoardModule } from './combined_board/combined_board.module';
 import { CombinedBoardEntity } from './combined_board/entities/combined_board.entity';
+import { TagsModule } from './tags/tags.module';
+import { TagsEntity } from './tags/entities/tags.entity';
+import { BoardTagsEntity } from './tags/entities/board_tags.entity';
 
 @Module({
   imports: [
@@ -46,7 +48,15 @@ import { CombinedBoardEntity } from './combined_board/entities/combined_board.en
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Board, CombinedBoardEntity, ImageEntity, User, Verification],
+      entities: [
+        Board,
+        CombinedBoardEntity,
+        TagsEntity,
+        BoardTagsEntity,
+
+        User,
+        Verification,
+      ],
       synchronize: true,
       logging: true,
     }),
@@ -83,6 +93,7 @@ import { CombinedBoardEntity } from './combined_board/entities/combined_board.en
     AuthModule,
     ImageModule,
     CombinedBoardModule,
+    TagsModule,
   ],
   controllers: [MailController],
 })

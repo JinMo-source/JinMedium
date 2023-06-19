@@ -5,6 +5,7 @@ import { CombinedBoardOutput } from './dto/combined_board.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+import { Board } from 'src/board/entities/board.entity';
 
 @Injectable()
 export class CombinedBoardService {
@@ -17,24 +18,7 @@ export class CombinedBoardService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  // async CreateCombinedBoard(
-  //   title: string,
-  //   subTitle: string,
-  // ): Promise<CombinedBoardOutput> {
-  //   try {
-  //     const combined = new CombinedBoardEntity();
-  //     combined.title = title;
-  //     combined.subTitle = subTitle;
-
-  //     await this.combinedBoardEntity.save(combined);
-
-  //     return { ok: true };
-  //   } catch (error) {
-  //     return { ok: false, error: `${error}` };
-  //   }
-  // }
-
-  async ComareCombinedImages(
+  async CreateCombinedImages(
     title: string,
     subTitle: string,
     imagePath: string,
@@ -46,7 +30,7 @@ export class CombinedBoardService {
 
       this.eventEmitter.on(
         'CompareBoardImages',
-        async (data: [string, string][], Board_Id) => {
+        async (data: [string, string][], board: Board) => {
           this.ComarpeImages.push(...data);
           const isImageMatched = this.CompareImagePathWithData(
             imagePath,
@@ -59,7 +43,7 @@ export class CombinedBoardService {
             ).map((item) => item[1]);
 
             combined.imagePath = matchedPaths[0];
-            combined.Board = Board_Id;
+            combined.Board = Promise.resolve(board);
             await this.combinedBoardEntity.save(combined);
           } else {
             console.log('이미지 경로와 일치하는 값이 존재하지 않습니다.');
@@ -80,7 +64,7 @@ export class CombinedBoardService {
             images.push(file);
             // this.eventEmitter.emit('uploadImages', bucketName, images);
             combined.imagePath = file.originalname;
-            combined.Board = Board_Id;
+            combined.Board = Promise.resolve(board);
             await this.combinedBoardEntity.save(combined);
           }
         },
@@ -104,6 +88,4 @@ export class CombinedBoardService {
     }
     return false; // 같은 값이 없는 경우 false 반환
   }
-
-  // SaveImagePathWithData();
 }

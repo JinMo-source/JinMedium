@@ -15,7 +15,7 @@ export class CombinedBoardResolver {
       const { title, subTitle, imagePath } = combinedBoard;
 
       // await this.combinedBoardService.CreateCombinedBoard(title, subTitle);
-      await this.combinedBoardService.ComareCombinedImages(
+      await this.combinedBoardService.CreateCombinedImages(
         title,
         subTitle,
         imagePath,

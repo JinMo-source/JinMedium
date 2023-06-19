@@ -5,33 +5,23 @@ import {
   OneToOne,
   JoinColumn,
   PrimaryGeneratedColumn,
+  ManyToOne,
 } from 'typeorm';
 import { IsString, IsArray } from 'class-validator';
 import { Board } from 'src/board/entities/board.entity';
+import { BoardTagsEntity } from './board_tags.entity';
 
 @Entity()
 @ObjectType()
-export class CombinedBoardEntity {
+export class TagsEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @IsString()
-  @Column()
-  title: string;
-
-  @IsString()
-  @Column()
-  subTitle: string;
-
-  @IsString()
-  @Column()
-  imagePath: string;
 
   @IsArray()
   @Column()
   tags: [string];
 
-  @OneToOne(() => Board, { lazy: true })
+  @ManyToOne(() => BoardTagsEntity, { lazy: true })
   @JoinColumn()
-  board: Promise<Board>;
+  boardTags: BoardTagsEntity;
 }
