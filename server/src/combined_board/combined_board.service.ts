@@ -24,46 +24,54 @@ export class CombinedBoardService {
     imagePath: string,
   ): Promise<CombinedBoardOutput> {
     try {
+      console.log('salkdnvlksdnkvlnasdjklvnjsdkvbnjdsbvkjasd', imagePath);
       const combined = new CombinedBoardEntity();
       combined.title = title;
       combined.subTitle = subTitle;
-
+      this.eventEmitter.removeAllListeners('CompareBoardImages');
       this.eventEmitter.on(
         'CompareBoardImages',
         async (data: [string, string][], board: Board) => {
-          this.ComarpeImages.push(...data);
-          const isImageMatched = this.CompareImagePathWithData(
-            imagePath,
-            this.ComarpeImages,
-          );
-          if (isImageMatched) {
-            console.log('이미지 경로와 일치하는 값이 존재합니다.');
-            const matchedPaths = this.ComarpeImages.filter(
-              (item) => item[0] === imagePath,
-            ).map((item) => item[1]);
+          console.log(board);
+          if (imagePath) {
+            this.ComarpeImages.push(...data);
+            const isImageMatched = this.CompareImagePathWithData(
+              imagePath,
+              this.ComarpeImages,
+            );
+            if (isImageMatched) {
+              console.log('이미지 경로와 일치하는 값이 존재합니다.');
+              const matchedPaths = this.ComarpeImages.filter(
+                (item) => item[0] === imagePath,
+              ).map((item) => item[1]);
 
-            combined.imagePath = matchedPaths[0];
-            combined.board = Promise.resolve(board);
-            await this.combinedBoardEntity.save(combined);
+              combined.imagePath = matchedPaths[0];
+              combined.board = Promise.resolve(board);
+              await this.combinedBoardEntity.save(combined);
+            } else {
+              console.log('이미지 경로와 일치하는 값이 존재하지 않습니다');
+              const imageData = imagePath.split(',')[1];
+
+              const uniqueId = uuidv4();
+              const imageType = imagePath
+                .split(',')[0]
+                .split(':')[1]
+                .split(';')[0];
+              const file = {
+                originalname: uniqueId,
+                buffer: Buffer.from(imageData, 'base64'),
+                mimetype: imageType,
+              };
+              const bucketName = 'jinmedium';
+              const images = [];
+              images.push(file);
+              // this.eventEmitter.emit('uploadImages', bucketName, images);
+              combined.imagePath = file.originalname;
+              combined.board = Promise.resolve(board);
+              await this.combinedBoardEntity.save(combined);
+            }
           } else {
-            console.log('이미지 경로와 일치하는 값이 존재하지 않습니다.');
-            const imageData = imagePath.split(',')[1];
-
-            const uniqueId = uuidv4();
-            const imageType = imagePath
-              .split(',')[0]
-              .split(':')[1]
-              .split(';')[0];
-            const file = {
-              originalname: uniqueId,
-              buffer: Buffer.from(imageData, 'base64'),
-              mimetype: imageType,
-            };
-            const bucketName = 'jinmedium';
-            const images = [];
-            images.push(file);
-            // this.eventEmitter.emit('uploadImages', bucketName, images);
-            combined.imagePath = file.originalname;
+            combined.imagePath = imagePath;
             combined.board = Promise.resolve(board);
             await this.combinedBoardEntity.save(combined);
           }

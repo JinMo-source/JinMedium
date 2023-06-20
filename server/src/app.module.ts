@@ -53,7 +53,6 @@ import { BoardTagsEntity } from './tags/entities/board_tags.entity';
         CombinedBoardEntity,
         TagsEntity,
         BoardTagsEntity,
-
         User,
         Verification,
       ],

@@ -47,7 +47,7 @@ const Preview = ({ title, images, handleSendClick }: PreviewProps) => {
         },
       });
       const getTagsData = getTagsResponse.data;
-      // console.log(createBoardData);
+      console.log(createBoardData);
       console.log(getTagsData);
 
       await handleSendClick();

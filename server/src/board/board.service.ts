@@ -24,63 +24,72 @@ export class BoardService {
     boardData: Operation[],
     User_Id,
   ): Promise<BoardOutput> {
-    const board = new Board();
-    board.title = boardTitle;
-    board.writer = User_Id;
-    board.content = []; // content 배열 초기화
+    try {
+      const board = new Board();
+      board.title = boardTitle;
+      board.writer = User_Id;
+      board.content = []; // content 배열 초기화
 
-    const images = []; // 배열로 초기화
-    const compareImages = [];
-    const imagePaths = boardData.filter(async (item) => {
-      if (item.insert.insertObject) {
-        const imageType = item.insert.insertObject.image
-          .split(',')[0]
-          .split(':')[1]
-          .split(';')[0];
+      const images = []; // 배열로 초기화
+      const compareImages = [];
+      const imagePaths = boardData.filter(async (item) => {
+        if (item.insert.insertObject) {
+          const imageType = item.insert.insertObject.image
+            .split(',')[0]
+            .split(':')[1]
+            .split(';')[0];
 
-        const insertObjectImage = item.insert.insertObject.image;
-        const imageData = item.insert.insertObject.image.split(',')[1];
+          const insertObjectImage = item.insert.insertObject.image;
+          const imageData = item.insert.insertObject.image.split(',')[1];
 
-        const uniqueId = uuidv4();
-        const file = {
-          originalname: uniqueId,
-          buffer: Buffer.from(imageData, 'base64'),
-          mimetype: imageType,
-        };
-        images.push(file);
-        compareImages.push([insertObjectImage, file.originalname]);
-        return true; // 필터링 조건이 true인 경우에만 유효한 값으로 간주
+          const uniqueId = uuidv4();
+          const file = {
+            originalname: uniqueId,
+            buffer: Buffer.from(imageData, 'base64'),
+            mimetype: imageType,
+          };
+          images.push(file);
+          compareImages.push([insertObjectImage, file.originalname]);
+          return true; // 필터링 조건이 true인 경우에만 유효한 값으로 간주
+        }
+        return false; // 필터링 조건이 false인 경우에는 유효하지 않은 값으로 간주
+      });
+
+      const imageName = images.map((item) => {
+        return item.originalname;
+      });
+
+      for (let i = 0; i < boardData.length; i++) {
+        const item = boardData[i];
+        if (item.insert.insertString) {
+          const insertString = item.insert.insertString;
+          board.content.push(insertString);
+        } else if (item.insert.insertObject) {
+          const boradImage = { ImagePaths: imageName[i] };
+          board.content.push(boradImage);
+        }
       }
-      return false; // 필터링 조건이 false인 경우에는 유효하지 않은 값으로 간주
-    });
 
-    const imageName = images.map((item) => {
-      return item.originalname;
-    });
+      if (imagePaths) {
+        const bucketName = 'jinmedium';
+        const Board = await this.boardRepository.save(board);
 
-    for (const item of boardData) {
-      if (item.insert.insertString) {
-        const insertString = item.insert.insertString;
-        board.content.push(insertString);
-      } else if (item.insert.insertObject) {
-        // console.log(images);
-        const boradImage = { ImagePaths: imageName };
-        board.content.push(boradImage);
+        this.eventEmitter.emit('CompareBoardImages', compareImages, Board);
+        // this.eventEmitter.emit('uploadImages', bucketName, images);
       }
+      const savedBoard = await this.boardRepository.save(board);
+      this.eventEmitter.emit('BoardTags', savedBoard);
+
+      await this.boardRepository.save(board);
+
+      return {
+        ok: true,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: `Board Service Error :${error}`,
+      };
     }
-
-    if (imagePaths) {
-      const bucketName = 'jinmedium';
-      const Board = await this.boardRepository.save(board);
-
-      this.eventEmitter.emit('CompareBoardImages', compareImages, Board);
-      // this.eventEmitter.emit('uploadImages', bucketName, images);
-    }
-
-    await this.boardRepository.save(board);
-
-    return {
-      ok: true,
-    };
   }
 }

@@ -4,10 +4,9 @@ import {
   Column,
   JoinColumn,
   PrimaryGeneratedColumn,
-  ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { IsString } from 'class-validator';
-
 import { BoardTagsEntity } from './board_tags.entity';
 
 @Entity()
@@ -22,7 +21,6 @@ export class TagsEntity {
   @Column({ type: String })
   tags: string;
 
-  @ManyToOne(() => BoardTagsEntity)
-  @JoinColumn()
+  @OneToMany(() => BoardTagsEntity, (boardTagsEntity) => boardTagsEntity.tags)
   boardTags: BoardTagsEntity;
 }

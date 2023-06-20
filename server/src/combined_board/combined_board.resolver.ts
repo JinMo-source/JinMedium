@@ -13,7 +13,7 @@ export class CombinedBoardResolver {
   ): Promise<CombinedBoardOutput> {
     try {
       const { title, subTitle, imagePath } = combinedBoard;
-
+      console.log(combinedBoard);
       // await this.combinedBoardService.CreateCombinedBoard(title, subTitle);
       await this.combinedBoardService.CreateCombinedImages(
         title,

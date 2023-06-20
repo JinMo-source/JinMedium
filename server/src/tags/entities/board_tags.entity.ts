@@ -1,5 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+  JoinTable,
+} from 'typeorm';
 import { Board } from 'src/board/entities/board.entity';
 import { TagsEntity } from './tags.entity';
 
@@ -10,13 +16,13 @@ export class BoardTagsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => Board, (board) => board.tag, {
-    cascade: true,
-  })
+  @ManyToOne(() => Board, (board) => board.boardTags, { onDelete: 'CASCADE' })
+  @JoinTable()
   board: Board;
 
-  @OneToMany(() => TagsEntity, (TagsEntity) => TagsEntity.boardTags, {
-    cascade: true,
+  @ManyToOne(() => TagsEntity, (tagsEntity) => tagsEntity.boardTags, {
+    onDelete: 'CASCADE',
   })
+  @JoinTable()
   tags: TagsEntity;
 }

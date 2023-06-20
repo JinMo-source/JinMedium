@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { IsArray, IsString } from 'class-validator';
 import { User } from '../../users/entities/User.entity';
 import { BoardTagsEntity } from 'src/tags/entities/board_tags.entity';
@@ -18,16 +18,10 @@ export class Board extends CoreEntity {
   @Column({ type: 'jsonb' })
   content: object[];
 
-  @IsArray()
-  @ManyToOne(
-    (type) => BoardTagsEntity,
-    (boardTagsEntity) => boardTagsEntity.board,
-  )
-  @JoinColumn({ name: 'BoardTag_Id' })
-  tag: BoardTagsEntity;
+  @OneToMany(() => BoardTagsEntity, (boardTagsEntity) => boardTagsEntity.board)
+  boardTags: BoardTagsEntity[];
 
-  @IsArray()
-  @ManyToOne((type) => User, (user) => user.board)
+  @ManyToOne(() => User, (user) => user.board)
   @JoinColumn({ name: 'User_id' })
   writer: User;
 }

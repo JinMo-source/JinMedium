@@ -9,8 +9,8 @@ export class TagsResolver {
 
   @Mutation(() => TagsOutput)
   async GetTags(@Args('input') tagsInput: TagsInput): Promise<TagsOutput> {
-    this.tagsService.GetTags(tagsInput);
     try {
+      await this.tagsService.GetTags(tagsInput);
       return {
         ok: true,
       };

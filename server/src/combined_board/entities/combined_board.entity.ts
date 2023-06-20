@@ -5,6 +5,7 @@ import {
   OneToOne,
   JoinColumn,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { IsString, IsArray } from 'class-validator';
 import { Board } from 'src/board/entities/board.entity';
@@ -33,5 +34,6 @@ export class CombinedBoardEntity {
 
   @OneToOne(() => Board, { lazy: true })
   @JoinColumn()
+  @Unique(['board'])
   board: Promise<Board>;
 }
