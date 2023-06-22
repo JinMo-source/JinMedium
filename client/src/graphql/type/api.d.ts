@@ -12,9 +12,8 @@ export interface UserVariables {
 export interface UserOutput {
   Output: CoreOutPut;
 }
-// INPUT
 
-// OUTPUT
+//RefreshAccessToken
 
 // FIND BY Id
 export interface FetchDataByIdInput {
@@ -35,24 +34,10 @@ export interface GetBoardData {
 }
 
 // Login
-export interface LoginInput {
-  email: string;
-  password: string;
-}
-
-export interface LoginVariables {
-  input: LoginInput;
-}
 
 export interface ValidateUser {
   email: string!;
   password: string!;
-}
-
-export interface AccessToken {
-  validateUser: {
-    accessToken: string;
-  };
 }
 
 // BOARD

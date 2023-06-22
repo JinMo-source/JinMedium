@@ -9,7 +9,7 @@ type PreviewProps = {
   images: any[];
   handleSendClick: () => void; // handleSendClick 함수를 prop으로 전달받습니다.
 };
-const Preview = ({ title, images, handleSendClick }: PreviewProps) => {
+const CombinedBoard = ({ title, images, handleSendClick }: PreviewProps) => {
   const [previewTitle, setPreviewTitle] = useState<string>(title);
   const [previewSubtitle, setPreviewSubtitle] = useState<string>("");
   const [previewImage, setPreviewImage] = useState<string>(
@@ -197,4 +197,4 @@ const Preview = ({ title, images, handleSendClick }: PreviewProps) => {
   );
 };
 
-export default Preview;
+export default CombinedBoard;

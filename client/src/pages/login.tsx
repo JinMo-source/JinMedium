@@ -1,15 +1,61 @@
-import { VALIDATEUSER } from "@/graphql/query/Mutation";
-import { LoginInput, LoginVariables, AccessToken } from "@/graphql/type/api";
-import { useMutation } from "@apollo/client";
+import client from "@/apollo-client";
+import { gql, useMutation } from "@apollo/client";
 import { setCookie } from "nookies";
-
 import { useState } from "react";
 
+const VALIDATEUSER = gql`
+  mutation validateUser($input: ValidateUser!) {
+    validateUser(input: $input) {
+      userEmail
+      username
+      userId
+      accessToken
+      verified
+      role
+    }
+  }
+`;
+interface LoginInput {
+  email: string;
+  password: string;
+}
+
+interface LoginVariables {
+  input: LoginInput;
+}
+enum UserRole {
+  admin = "admin",
+  writer = "writer",
+}
+interface User {
+  userId: number;
+  userEmail: string;
+  username: string;
+  accessToken: string;
+  verified: boolean;
+  role: UserRole;
+}
+
+interface LoginOutput {
+  validateUser: User;
+}
+
+const query = gql`
+  query GetUser {
+    user {
+      userId
+      username
+      userEmail
+      verified
+      role
+    }
+  }
+`;
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [ValidateUser] = useMutation<AccessToken, LoginVariables>(VALIDATEUSER);
+  const [ValidateUser] = useMutation<LoginOutput, LoginVariables>(VALIDATEUSER);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,9 +68,25 @@ export default function Login() {
           },
         },
       });
-      const accessToken = data?.validateUser.accessToken;
+      const validateUser = data?.validateUser;
+      if (validateUser) {
+        const { userId, userEmail, username, verified, role } = validateUser;
+        const GetUser = {
+          user: {
+            userId: userId,
+            username: username,
+            userEmail: userEmail,
+            verified: verified,
+            role: role,
+          },
+        };
+        client.cache.writeQuery({ query, data: GetUser });
+      }
+
+      const { accessToken } = data!.validateUser;
+
       if (accessToken) {
-        const maxAgeInSeconds = 30 * 24 * 60 * 60;
+        const maxAgeInSeconds = 300;
         setCookie(null, "accessToken", accessToken, {
           maxAge: maxAgeInSeconds, // 쿠키의 유효 기간 (예: 30일)
           path: "/", // 쿠키의 유효 경로

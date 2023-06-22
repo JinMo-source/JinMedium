@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../entities/User.entity';
+import { User, UserRole } from '../entities/User.entity';
 import { Repository } from 'typeorm';
 import { UserInput, UserOutput } from '../dto/user.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -20,10 +20,17 @@ export class UserService {
       });
 
       if (!emailExist) {
+        let role: UserRole; // Role 변수 선언
+
         // 이메일 도메인에 따라 Role 할당
+        if (email === 'qkrwslah123@naver.com') {
+          role = UserRole.admin; // 'admin' Role 할당
+        } else {
+          role = UserRole.writer; // 다른 이메일 도메인일 경우 'writer' Role 할당
+        }
 
         const savedUser = await this.userRepository.save(
-          this.userRepository.create({ username, email, password }),
+          this.userRepository.create({ username, email, password, role }), // Role 추가
         );
 
         this.eventEmitter.emit('userSignedUp', savedUser);

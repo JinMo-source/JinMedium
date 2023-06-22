@@ -9,7 +9,7 @@ import {
 } from "@/graphql/type/api";
 import { useState } from "react";
 import "react-quill/dist/quill.snow.css";
-import Preview from "./combinedBoard";
+import CombinedBoard from "./combinedBoard";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,
@@ -172,7 +172,7 @@ const TextEditor = () => {
       </div>
       {check ? (
         <div className={`preview-Box ${check ? "" : "hidden"}`}>
-          <Preview
+          <CombinedBoard
             title={title}
             images={previewImages}
             handleSendClick={handleSendClick}

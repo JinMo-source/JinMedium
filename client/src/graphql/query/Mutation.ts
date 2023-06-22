@@ -36,12 +36,3 @@ export const SiGNUP = gql`
     }
   }
 `;
-
-//Login
-export const VALIDATEUSER = gql`
-  mutation validateUser($input: ValidateUser!) {
-    validateUser(input: $input) {
-      accessToken
-    }
-  }
-`;

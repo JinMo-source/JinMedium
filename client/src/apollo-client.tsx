@@ -10,7 +10,7 @@ const authLink = setContext((_, { headers }) => {
   // 헤더에 토큰을 추가
   const cookies = parseCookies(); // 쿠키 가져오기
   const accessToken = cookies.accessToken;
-  console.log(accessToken);
+
   return {
     headers: {
       ...headers,
@@ -19,10 +19,19 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+const cache = new InMemoryCache({
+  typePolicies: {
+    User: {
+      keyFields: ["userId,userEmail,username", "verified", "role"],
+    },
+  },
+});
+
 const client = new ApolloClient({
   uri: "http://localhost:4000/graphql",
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: cache,
+  connectToDevTools: true,
 });
 
 export default client;

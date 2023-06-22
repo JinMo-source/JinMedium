@@ -21,6 +21,7 @@ import { CombinedBoardEntity } from './combined_board/entities/combined_board.en
 import { TagsModule } from './tags/tags.module';
 import { TagsEntity } from './tags/entities/tags.entity';
 import { BoardTagsEntity } from './tags/entities/board_tags.entity';
+import { RefreshToken } from './auth/entities/userToken.entity';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { BoardTagsEntity } from './tags/entities/board_tags.entity';
         TagsEntity,
         BoardTagsEntity,
         User,
+        RefreshToken,
         Verification,
       ],
       synchronize: true,
