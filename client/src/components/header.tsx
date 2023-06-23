@@ -28,10 +28,35 @@ const Header = () => {
     RefreshTokenOutput,
     RefreshTokenInput
   >(REFRESH_ACCESS_TOKEN);
-
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const cookies = parseCookies();
   const [accessToken, setAccessToken] = useState(cookies.accessToken);
-  const [expiresAt, setExpiresAt] = useState<Date | null>(null);
+  const [expiresAt, setExpiresAt] = useState(() => {
+    const currentTime = new Date();
+    const expirationTime = new Date(currentTime.getTime() + 15 * 60 * 1000); // 15분 뒤의 시간
+    return expirationTime;
+  });
+  const [test, setTest] = useState(0);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedLoggedInStatus = localStorage.getItem("isLoggedIn");
+      setIsLoggedIn(storedLoggedInStatus === "true");
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      const { isLoggedIn } = event.data;
+      setIsLoggedIn(isLoggedIn);
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
 
   const handleRefreshAccessToken = async () => {
     try {
@@ -52,7 +77,6 @@ const Header = () => {
       });
     } catch (error) {
       console.error(error);
-      // 에러를 적절히 처리하세요
     }
   };
 
@@ -63,25 +87,18 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (expiresAt) {
-      console.log("TimerStert");
+    if (expiresAt && isLoggedIn) {
+      console.log("TimerStart");
+
       const refreshTokenExpirationMs =
-        calculateTokenExpirationTime(expiresAt) - 60000; // 토큰 만료 1분 전에 재요청
+        calculateTokenExpirationTime(expiresAt) - 60000;
       const timeoutId = setTimeout(
         handleRefreshAccessToken,
         refreshTokenExpirationMs
       );
-
       return () => clearTimeout(timeoutId);
     }
-  }, [expiresAt]);
-
-  useEffect(() => {
-    if (cookies.accessToken) {
-      console.log("start");
-      handleRefreshAccessToken();
-    }
-  }, []);
+  }, [expiresAt, isLoggedIn]);
 
   return (
     <header>

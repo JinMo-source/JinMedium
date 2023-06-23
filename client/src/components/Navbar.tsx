@@ -17,6 +17,18 @@ const Navbar = () => {
     } else {
       setIsLoggedIn(false);
     }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      setIsLoggedIn(true);
+    };
+    console.log("good");
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
   }, []);
 
   return (

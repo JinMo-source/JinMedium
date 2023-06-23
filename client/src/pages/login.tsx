@@ -1,7 +1,8 @@
 import client from "@/apollo-client";
 import { gql, useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
 import { setCookie } from "nookies";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 const VALIDATEUSER = gql`
   mutation validateUser($input: ValidateUser!) {
@@ -54,9 +55,8 @@ const query = gql`
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [ValidateUser] = useMutation<LoginOutput, LoginVariables>(VALIDATEUSER);
-
+  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -80,13 +80,13 @@ export default function Login() {
             role: role,
           },
         };
+        localStorage.setItem("isLoggedIn", "true");
         client.cache.writeQuery({ query, data: GetUser });
       }
 
       const { accessToken } = data!.validateUser;
-
       if (accessToken) {
-        const maxAgeInSeconds = 300;
+        const maxAgeInSeconds = 90000;
         setCookie(null, "accessToken", accessToken, {
           maxAge: maxAgeInSeconds, // 쿠키의 유효 기간 (예: 30일)
           path: "/", // 쿠키의 유효 경로
@@ -94,6 +94,9 @@ export default function Login() {
           sameSite: "strict", // SameSite 설정
         });
       }
+
+      window.postMessage({ isLoggedIn: true }, "*");
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
