@@ -1,15 +1,16 @@
 import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
 import { parseCookies, setCookie } from "nookies";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
 
-export interface RefreshToken {
+interface RefreshToken {
   accessToken: string;
 }
-export interface RefreshTokenInput {
+interface RefreshTokenInput {
   input: RefreshToken;
 }
-export interface RefreshTokenOutput {
+interface RefreshTokenOutput {
   newAccessToken: string;
   expiresInMs: Date;
 }
@@ -23,12 +24,24 @@ const REFRESH_ACCESS_TOKEN = gql`
   }
 `;
 
+interface GetUserInput {
+  id: number;
+}
+
+const GET_USER = gql`
+  query GetUser($ID: GetUserInput!) {
+    GetUser(ID: $input) {
+      newAccessToken
+      expiresInMs
+    }
+  }
+`;
+
 const Header = () => {
   const [refreshAccessToken] = useMutation<
     RefreshTokenOutput,
     RefreshTokenInput
   >(REFRESH_ACCESS_TOKEN);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const cookies = parseCookies();
   const [accessToken, setAccessToken] = useState(cookies.accessToken);
   const [expiresAt, setExpiresAt] = useState(() => {
@@ -36,27 +49,8 @@ const Header = () => {
     const expirationTime = new Date(currentTime.getTime() + 15 * 60 * 1000); // 15분 뒤의 시간
     return expirationTime;
   });
-  const [test, setTest] = useState(0);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedLoggedInStatus = localStorage.getItem("isLoggedIn");
-      setIsLoggedIn(storedLoggedInStatus === "true");
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      const { isLoggedIn } = event.data;
-      setIsLoggedIn(isLoggedIn);
-    };
-
-    window.addEventListener("message", handleMessage);
-
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, []);
+  const router = useRouter();
+  const client = useApolloClient();
 
   const handleRefreshAccessToken = async () => {
     try {
@@ -65,7 +59,7 @@ const Header = () => {
       });
       const newAccessToken = data!.newAccessToken;
       const newExpiresAt = new Date(data!.expiresInMs);
-      console.log(newAccessToken);
+
       setAccessToken(newAccessToken);
       setExpiresAt(newExpiresAt);
 
@@ -87,7 +81,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (expiresAt && isLoggedIn) {
+    if (expiresAt) {
       console.log("TimerStart");
 
       const refreshTokenExpirationMs =
@@ -98,11 +92,17 @@ const Header = () => {
       );
       return () => clearTimeout(timeoutId);
     }
-  }, [expiresAt, isLoggedIn]);
+  }, [expiresAt]);
+
+  const handleHomeButtonClick = () => {
+    router.push("/");
+  };
 
   return (
     <header>
-      <h1>Medium Clone Coding</h1>
+      <h1>
+        <button onClick={handleHomeButtonClick}>Medium Clone Coding</button>
+      </h1>
       <div>
         <Navbar />
       </div>

@@ -63,7 +63,7 @@ export class AuthService {
       // await this.refreshTokenEntity.save(newRefreshToken);
       await this.userEntity.findOne({ where: { id: user.id } });
       return {
-        userId: user.id,
+        id: user.id,
         userEmail: user.email,
         username: user.username,
         verified: user.verified,

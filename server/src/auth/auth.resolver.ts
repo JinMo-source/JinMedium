@@ -21,11 +21,11 @@ export class AuthResolver {
   ): Promise<ValidateUserOutput> {
     const user = await this.authService.validateUser(validateUser);
     if (user) {
-      const { userId, userEmail, username, accessToken, verified, role } =
+      const { id, userEmail, username, accessToken, verified, role } =
         await this.authService.login(validateUser);
 
       return {
-        userId,
+        id,
         userEmail,
         username,
         accessToken,

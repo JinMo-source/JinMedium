@@ -1,62 +1,31 @@
-import client from "@/apollo-client";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useApolloClient, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { setCookie } from "nookies";
-import { useContext, useState } from "react";
+import { useState } from "react";
+import { Get_User_Query } from "@/until/userQueries";
+import { LoginOutput, LoginVariables } from "@/userInterface";
+import { normalizeAndStoreData } from "@/until/cacheHelper";
 
 const VALIDATEUSER = gql`
   mutation validateUser($input: ValidateUser!) {
     validateUser(input: $input) {
+      id
       userEmail
       username
-      userId
       accessToken
       verified
       role
     }
   }
 `;
-interface LoginInput {
-  email: string;
-  password: string;
-}
 
-interface LoginVariables {
-  input: LoginInput;
-}
-enum UserRole {
-  admin = "admin",
-  writer = "writer",
-}
-interface User {
-  userId: number;
-  userEmail: string;
-  username: string;
-  accessToken: string;
-  verified: boolean;
-  role: UserRole;
-}
-
-interface LoginOutput {
-  validateUser: User;
-}
-
-const query = gql`
-  query GetUser {
-    user {
-      userId
-      username
-      userEmail
-      verified
-      role
-    }
-  }
-`;
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [ValidateUser] = useMutation<LoginOutput, LoginVariables>(VALIDATEUSER);
   const router = useRouter();
+  const client = useApolloClient();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -70,20 +39,10 @@ export default function Login() {
       });
       const validateUser = data?.validateUser;
       if (validateUser) {
-        const { userId, userEmail, username, verified, role } = validateUser;
-        const GetUser = {
-          user: {
-            userId: userId,
-            username: username,
-            userEmail: userEmail,
-            verified: verified,
-            role: role,
-          },
-        };
-        localStorage.setItem("isLoggedIn", "true");
-        client.cache.writeQuery({ query, data: GetUser });
+        const { id, userEmail, username, verified, role } = validateUser;
+        const GetUser = [id, userEmail, username, verified, role];
+        normalizeAndStoreData(client, [GetUser], "User");
       }
-
       const { accessToken } = data!.validateUser;
       if (accessToken) {
         const maxAgeInSeconds = 90000;
@@ -95,7 +54,6 @@ export default function Login() {
         });
       }
 
-      window.postMessage({ isLoggedIn: true }, "*");
       router.push("/");
     } catch (error) {
       console.log(error);

@@ -26,7 +26,7 @@ export class BoardResolver {
     @CurrentUser() user: User, // 현재 인증된 사용자 정보를 주입받음
     @Context() context: any, // NestJS 컨텍스트 객체를 주입받음
   ): Promise<BoardOutput> {
-    // console.log('Current User:', user.id);
+    // console.log('Current User:', user);
     // console.log('Context:', context);
     const boardTitle = operationInput.title as string;
     const boardData = operationInput.ops as Operation[];

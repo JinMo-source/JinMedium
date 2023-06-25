@@ -24,6 +24,10 @@ export class ValidateUser {
 
 @ObjectType()
 export class ValidateUserOutput {
+  @IsNumber()
+  @Field((type) => Number)
+  id: number;
+
   @IsString()
   @Field((type) => String)
   userEmail: string;
@@ -31,10 +35,6 @@ export class ValidateUserOutput {
   @IsString()
   @Field((type) => String)
   username: string;
-
-  @IsNumber()
-  @Field((type) => Number)
-  userId: number;
 
   @IsString()
   @Field((type) => String, { nullable: true })
