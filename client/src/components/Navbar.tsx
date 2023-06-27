@@ -20,6 +20,7 @@ const GET_USER = gql`
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [login, setLogin] = useState(false);
   const router = useRouter();
 
   const toggleMenu = () => {

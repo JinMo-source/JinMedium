@@ -1,16 +1,18 @@
 import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
 import { parseCookies, setCookie } from "nookies";
-import { gql, useApolloClient, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
+import { isLoggedInVar } from "@/until/apollo";
+import { useReactiveVar } from "@apollo/client";
 
-interface RefreshToken {
+export interface RefreshToken {
   accessToken: string;
 }
-interface RefreshTokenInput {
+export interface RefreshTokenInput {
   input: RefreshToken;
 }
-interface RefreshTokenOutput {
+export interface RefreshTokenOutput {
   newAccessToken: string;
   expiresInMs: Date;
 }
@@ -24,7 +26,7 @@ const REFRESH_ACCESS_TOKEN = gql`
   }
 `;
 
-interface GetUserInput {
+export interface GetUserInput {
   id: number;
 }
 
@@ -42,6 +44,7 @@ const Header = () => {
     RefreshTokenOutput,
     RefreshTokenInput
   >(REFRESH_ACCESS_TOKEN);
+
   const cookies = parseCookies();
   const [accessToken, setAccessToken] = useState(cookies.accessToken);
   const [expiresAt, setExpiresAt] = useState(() => {
@@ -49,8 +52,10 @@ const Header = () => {
     const expirationTime = new Date(currentTime.getTime() + 15 * 60 * 1000); // 15분 뒤의 시간
     return expirationTime;
   });
+
   const router = useRouter();
-  const client = useApolloClient();
+
+  const isLoggedIn = useReactiveVar(isLoggedInVar);
 
   const handleRefreshAccessToken = async () => {
     try {
@@ -59,7 +64,7 @@ const Header = () => {
       });
       const newAccessToken = data!.newAccessToken;
       const newExpiresAt = new Date(data!.expiresInMs);
-
+      console.log(newAccessToken);
       setAccessToken(newAccessToken);
       setExpiresAt(newExpiresAt);
 
@@ -81,7 +86,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (expiresAt) {
+    if (expiresAt && isLoggedIn) {
       console.log("TimerStart");
 
       const refreshTokenExpirationMs =
@@ -92,16 +97,16 @@ const Header = () => {
       );
       return () => clearTimeout(timeoutId);
     }
-  }, [expiresAt]);
+  }, [expiresAt, isLoggedIn]);
 
-  const handleHomeButtonClick = () => {
+  const handleButtonClick = () => {
     router.push("/");
   };
 
   return (
     <header>
       <h1>
-        <button onClick={handleHomeButtonClick}>Medium Clone Coding</button>
+        <button onClick={handleButtonClick}>Medium Clone Coding</button>
       </h1>
       <div>
         <Navbar />

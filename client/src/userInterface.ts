@@ -22,5 +22,11 @@ export interface LoginVariables {
 }
 
 export interface LoginOutput {
-  validateUser: User;
+  userEmail: string;
+  accessToken: string;
+  isLoggedIn: boolean;
+}
+
+export interface LoginVariablesOutput {
+  validateUser: LoginOutput;
 }

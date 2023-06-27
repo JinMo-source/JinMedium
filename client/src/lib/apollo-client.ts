@@ -1,76 +1,31 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
-import { persistCache } from "apollo3-cache-persist";
 import { setContext } from "@apollo/client/link/context";
 import { parseCookies } from "nookies";
+import { createCache } from "@/until/cacheHelper";
 
-function initializeApollo() {
-  const httpLink = createHttpLink({
-    uri: "http://localhost:4000/graphql",
-  });
+const httpLink = createHttpLink({
+  uri: "http://localhost:4000/graphql",
+});
 
-  const authLink = setContext((_, { headers }) => {
-    // 헤더에 토큰을 추가
-    const cookies = parseCookies(); // 쿠키 가져오기
-    const accessToken = cookies.accessToken;
+const authLink = setContext((_, { headers }) => {
+  // 헤더에 토큰을 추가
+  const cookies = parseCookies(); // 쿠키 가져오기
+  const accessToken = cookies.accessToken;
 
-    return {
-      headers: {
-        ...headers,
-        Authorization: accessToken ? `Bearer ${accessToken}` : "",
-      },
-    };
-  });
-
-  const cache = new InMemoryCache({
-    typePolicies: {
-      user: {
-        keyFields: ["id"],
-        fields: {
-          id: {
-            read(id) {
-              return `User:${id}`;
-            },
-          },
-          userEmail: {
-            read(userEmail) {
-              return userEmail;
-            },
-          },
-          username: {
-            read(username) {
-              return username;
-            },
-          },
-          verified: {
-            read(verified) {
-              return verified;
-            },
-          },
-          role: {
-            read(role) {
-              return role;
-            },
-          },
-        },
-      },
+  return {
+    headers: {
+      ...headers,
+      Authorization: accessToken ? `Bearer ${accessToken}` : "",
     },
-  });
+  };
+});
 
-  const client = new ApolloClient({
-    ssrMode: typeof window === "undefined",
-    link: authLink.concat(httpLink),
-    cache: cache,
-    connectToDevTools: true,
-  });
+const cache = createCache();
+const client = new ApolloClient({
+  ssrMode: typeof window === "undefined",
+  link: authLink.concat(httpLink),
+  cache: cache,
+  connectToDevTools: true,
+});
 
-  if (typeof window !== "undefined") {
-    persistCache({
-      cache,
-      storage: window.localStorage,
-    });
-  }
-
-  return client;
-}
-
-export default initializeApollo;
+export default client;

@@ -1,20 +1,16 @@
-import { gql, useApolloClient, useMutation } from "@apollo/client";
-import { useRouter } from "next/router";
+import { gql, useMutation } from "@apollo/client";
 import { setCookie } from "nookies";
 import { useState } from "react";
-import { Get_User_Query } from "@/until/userQueries";
-import { LoginOutput, LoginVariables } from "@/userInterface";
-import { normalizeAndStoreData } from "@/until/cacheHelper";
+import { LoginVariablesOutput, LoginVariables } from "@/userInterface";
+import { useRouter } from "next/router";
+import { isLoggedInVar } from "@/until/apollo";
 
 const VALIDATEUSER = gql`
   mutation validateUser($input: ValidateUser!) {
     validateUser(input: $input) {
-      id
+      isLoggedIn
       userEmail
-      username
       accessToken
-      verified
-      role
     }
   }
 `;
@@ -22,10 +18,12 @@ const VALIDATEUSER = gql`
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [ValidateUser] = useMutation<LoginOutput, LoginVariables>(VALIDATEUSER);
-  const router = useRouter();
-  const client = useApolloClient();
+  const [ValidateUser] = useMutation<LoginVariablesOutput, LoginVariables>(
+    VALIDATEUSER,
+    {}
+  );
 
+  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -37,13 +35,13 @@ export default function Login() {
           },
         },
       });
-      const validateUser = data?.validateUser;
-      if (validateUser) {
-        const { id, userEmail, username, verified, role } = validateUser;
-        const GetUser = [id, userEmail, username, verified, role];
-        normalizeAndStoreData(client, [GetUser], "User");
-      }
-      const { accessToken } = data!.validateUser;
+
+      const validateUser = data!.validateUser;
+
+      const { userEmail, isLoggedIn, accessToken } = validateUser;
+
+      isLoggedInVar(true);
+
       if (accessToken) {
         const maxAgeInSeconds = 90000;
         setCookie(null, "accessToken", accessToken, {
@@ -53,8 +51,7 @@ export default function Login() {
           sameSite: "strict", // SameSite 설정
         });
       }
-
-      router.push("/");
+      // router.push("/", undefined, { shallow: true });
     } catch (error) {
       console.log(error);
     }
