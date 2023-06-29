@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../users/entities/User.entity';
 import { UserService } from '../users/service/user.service';
-import { ValidateUser, ValidateUserOutput } from './dto/validateUser.dto';
+import { ValidateUser, LoginOutput } from './dto/validateUser.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -43,10 +43,15 @@ export class AuthService {
     return null;
   }
 
-  async login(validateUser: ValidateUser): Promise<ValidateUserOutput> {
+  async login(validateUser: ValidateUser): Promise<LoginOutput> {
     const user = await this.validateUser(validateUser);
     if (user) {
-      const payload = { username: user.username, email: user.email };
+      const expirationTime = new Date();
+
+      const payload = {
+        username: user.username,
+        email: user.email,
+      };
       const accessToken = this.jwtService.sign(payload);
 
       const refreshTokenPayload = { userId: user.id }; // 예시로 사용자 ID를 refreshToken 페이로드에 포함
@@ -63,11 +68,8 @@ export class AuthService {
       // await this.refreshTokenEntity.save(newRefreshToken);
       await this.userEntity.findOne({ where: { id: user.id } });
       return {
-        id: user.id,
         userEmail: user.email,
-        username: user.username,
-        verified: user.verified,
-        role: user.role,
+        isLoggedIn: true,
         accessToken,
       };
     }
@@ -75,19 +77,20 @@ export class AuthService {
     throw new Error('사용자 인증에 실패했습니다.');
   }
 
-  async RefreshAccessToken(userId: number) {
+  async RefreshAccessToken(userEmail: string) {
     const checkRefreshToken = await this.userEntity.findOne({
-      where: { id: userId },
+      where: { email: userEmail },
       relations: ['refreshToken'],
     });
-
+    console.log(userEmail);
     if (checkRefreshToken) {
-      const userData = await this.userEntity.findOne({ where: { id: userId } });
+      const userData = await this.userEntity.findOne({
+        where: { email: userEmail },
+      });
       const payload = { username: userData.username, email: userData.email };
       const newAccessToken = this.jwtService.sign(payload);
-      const expiresInMs = new Date(Date.now() + 900000); // 현재 시간 + 15분(900,000밀리초)
 
-      return { newAccessToken, expiresInMs };
+      return { accessToken: newAccessToken };
     }
     // Else일때 추가 해야함
   }

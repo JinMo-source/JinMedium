@@ -7,6 +7,7 @@ import {
   IsNumber,
   IsString,
 } from 'class-validator';
+import { boolean } from 'joi';
 import { UserRole } from 'src/users/entities/User.entity';
 
 @InputType()
@@ -23,30 +24,18 @@ export class ValidateUser {
 }
 
 @ObjectType()
-export class ValidateUserOutput {
-  @IsNumber()
-  @Field((type) => Number)
-  id: number;
-
+export class LoginOutput {
   @IsString()
   @Field((type) => String)
   userEmail: string;
 
-  @IsString()
-  @Field((type) => String)
-  username: string;
+  @IsBoolean()
+  @Field((type) => Boolean)
+  isLoggedIn: boolean;
 
   @IsString()
   @Field((type) => String, { nullable: true })
   accessToken: string;
-
-  @IsBoolean()
-  @Field((type) => Boolean, { nullable: true })
-  verified: boolean;
-
-  @IsEnum(UserRole)
-  @Field((type) => UserRole, { nullable: true })
-  role: UserRole;
 }
 
 @InputType()

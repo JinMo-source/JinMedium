@@ -44,18 +44,16 @@ const Header = () => {
     RefreshTokenOutput,
     RefreshTokenInput
   >(REFRESH_ACCESS_TOKEN);
-
   const cookies = parseCookies();
+  const [isLoggedInState, setIsLoggedState] = useState(false);
   const [accessToken, setAccessToken] = useState(cookies.accessToken);
   const [expiresAt, setExpiresAt] = useState(() => {
     const currentTime = new Date();
     const expirationTime = new Date(currentTime.getTime() + 15 * 60 * 1000); // 15분 뒤의 시간
     return expirationTime;
   });
-
-  const router = useRouter();
-
   const isLoggedIn = useReactiveVar(isLoggedInVar);
+  const router = useRouter();
 
   const handleRefreshAccessToken = async () => {
     try {
@@ -86,7 +84,7 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (expiresAt && isLoggedIn) {
+    if ((expiresAt && isLoggedIn) || isLoggedInState) {
       console.log("TimerStart");
 
       const refreshTokenExpirationMs =
@@ -97,7 +95,7 @@ const Header = () => {
       );
       return () => clearTimeout(timeoutId);
     }
-  }, [expiresAt, isLoggedIn]);
+  }, [expiresAt, isLoggedIn, isLoggedInState]);
 
   const handleButtonClick = () => {
     router.push("/");

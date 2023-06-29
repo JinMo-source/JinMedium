@@ -40,6 +40,9 @@ export default function Login() {
 
       const { userEmail, isLoggedIn, accessToken } = validateUser;
 
+      localStorage.setItem("IsLoggedIn", `${isLoggedIn}`);
+      localStorage.setItem("IsLoggedIn_Email", userEmail);
+
       isLoggedInVar(true);
 
       if (accessToken) {
@@ -51,7 +54,7 @@ export default function Login() {
           sameSite: "strict", // SameSite 설정
         });
       }
-      // router.push("/", undefined, { shallow: true });
+      router.push("/");
     } catch (error) {
       console.log(error);
     }
