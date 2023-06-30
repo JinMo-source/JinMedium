@@ -1,20 +1,28 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { User } from '../users/entities/User.entity';
 import { AuthService } from './auth.service';
-import { ValidateUser, ValidateUserOutput } from './dto/validateUser.dto';
+import { ValidateUser, LoginOutput } from './dto/validateUser.dto';
+import { CurrentUser } from './current-user.decorator';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from './gql-auth.guard';
 
 @Resolver((of) => User)
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @Mutation(() => ValidateUserOutput)
+  @Mutation(() => LoginOutput)
   async validateUser(
     @Args('input') validateUser: ValidateUser,
-  ): Promise<ValidateUserOutput> {
+  ): Promise<LoginOutput> {
     const user = await this.authService.validateUser(validateUser);
     if (user) {
-      const { accessToken } = await this.authService.login(validateUser);
+      const { userEmail, username, isLoggedIn, accessToken } =
+        await this.authService.login(validateUser);
+
       return {
+        userEmail,
+        username,
+        isLoggedIn,
         accessToken,
       };
     }

@@ -14,6 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any): Promise<any> {
     // 토큰에서 추출된 정보로 사용자를 인증하고 반환합니다.
+
     return await this.authService.validateUserByEmail(payload.userEmail);
   }
 }

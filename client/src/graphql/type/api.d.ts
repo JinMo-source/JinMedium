@@ -12,9 +12,8 @@ export interface UserVariables {
 export interface UserOutput {
   Output: CoreOutPut;
 }
-// INPUT
 
-// OUTPUT
+//RefreshAccessToken
 
 // FIND BY Id
 export interface FetchDataByIdInput {
@@ -35,24 +34,10 @@ export interface GetBoardData {
 }
 
 // Login
-export interface LoginInput {
-  email: string;
-  password: string;
-}
-
-export interface LoginVariables {
-  input: LoginInput;
-}
 
 export interface ValidateUser {
   email: string!;
   password: string!;
-}
-
-export interface AccessToken {
-  validateUser: {
-    accessToken: string;
-  };
 }
 
 // BOARD
@@ -76,6 +61,31 @@ export interface Operation {
 export interface OperationOps {
   ops: Operation[];
 }
+export interface OperationFinally {
+  title: string;
+  ops: Operation[];
+}
 export interface OperationInput {
-  input: OperationOps;
+  input: OperationFinally;
+}
+
+//Combined Board
+export interface CombinedBoardData {
+  title: string;
+  subTitle: string;
+  imagePath: string;
+}
+
+export interface CombinedBoardInput {
+  input: CombinedBoardData;
+}
+
+// Tags
+
+export interface GetTagsData {
+  tags: string[];
+}
+
+export interface GetTagsInput {
+  input: GetTagsData;
 }

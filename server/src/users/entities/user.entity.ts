@@ -10,10 +10,19 @@ import {
   IsEnum,
 } from 'class-validator';
 import { CoreEntity } from '../../common/entities/core.entity';
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { InternalServerErrorException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Board } from '../../board/entities/board.entity';
+import { RefreshToken } from 'src/auth/entities/userToken.entity';
 
 export enum UserRole {
   admin = 'admin',
@@ -61,6 +70,10 @@ export class User extends CoreEntity {
   @Field((type) => Boolean)
   @IsBoolean()
   verified: boolean;
+
+  @OneToOne(() => RefreshToken)
+  @JoinColumn()
+  refreshToken: RefreshToken;
 
   @OneToMany((type) => Board, (board) => board.writer, { cascade: true })
   @IsArray()

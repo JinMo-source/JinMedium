@@ -7,6 +7,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import cors from '@fastify/cors';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -15,7 +16,11 @@ async function bootstrap() {
   );
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
-  app.enableCors();
+  app.register(cors, {
+    origin: 'http://localhost:3000',
+    credentials: true,
+  });
+  // app.enableCors();
 
   await app.register(compression, { encodings: ['gzip', 'deflate'] });
   await app.listen(4000);

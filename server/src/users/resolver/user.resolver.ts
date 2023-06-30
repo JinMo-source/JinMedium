@@ -2,6 +2,9 @@ import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { UserInput, UserOutput } from '../dto/user.dto';
 import { User } from '../entities/User.entity';
 import { UserService } from '../service/user.service';
+import { GqlAuthGuard } from 'src/auth/gql-auth.guard';
+import { UseGuards } from '@nestjs/common';
+import { CurrentUser } from 'src/auth/current-user.decorator';
 
 @Resolver((of) => User)
 export class UserResolver {
@@ -14,8 +17,10 @@ export class UserResolver {
   }
 
   @Query(() => User)
-  async user(@Args('email') email: string): Promise<User | null> {
-    const user = await this.userService.findByEmail(email);
+  @UseGuards(GqlAuthGuard)
+  async GetUser(@CurrentUser() user: User): Promise<User | null> {
+    const userId = user.id;
+    const currentUser = await this.userService.findById(userId);
     return user;
   }
 }

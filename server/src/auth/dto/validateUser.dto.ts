@@ -1,5 +1,14 @@
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
-import { IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
+import { boolean } from 'joi';
+import { UserRole } from 'src/users/entities/User.entity';
 
 @InputType()
 export class ValidateUser {
@@ -15,8 +24,38 @@ export class ValidateUser {
 }
 
 @ObjectType()
-export class ValidateUserOutput {
+export class LoginOutput {
   @IsString()
   @Field((type) => String)
+  userEmail: string;
+
+  @IsString()
+  @Field((type) => String)
+  username: string;
+
+  @IsBoolean()
+  @Field((type) => Boolean)
+  isLoggedIn: boolean;
+
+  @IsString()
+  @Field((type) => String, { nullable: true })
   accessToken: string;
+}
+
+@InputType()
+export class RefreshTokenInput {
+  @IsString()
+  @Field((type) => String, { nullable: true })
+  accessToken: string;
+}
+
+@ObjectType()
+export class RefreshTokenOutput {
+  @IsString()
+  @Field((type) => String, { nullable: true })
+  newAccessToken: string;
+
+  @IsDate()
+  @Field(() => Date)
+  expiresInMs: Date;
 }
