@@ -2,69 +2,35 @@ import { useEffect, useState } from "react";
 import { destroyCookie, parseCookies } from "nookies";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { gql } from "@apollo/client";
-
-interface AccessTokenUserInterface {
-  userId: number;
-}
-
-const GET_USER = gql`
-  query GetUser($ID: GetUserInput!) {
-    GetUser(ID: $input) {
-      newAccessToken
-      expiresInMs
-    }
-  }
-`;
+import { gql, useReactiveVar } from "@apollo/client";
+import { isLoggedInVar, logoutState } from "@/until/apollo";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [login, setLogin] = useState(false);
+  const [username, setUsername] = useState("");
   const router = useRouter();
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const MakeVarLoggedIn = useReactiveVar(isLoggedInVar);
 
   useEffect(() => {
-    const cookies = parseCookies();
-    const accessToken = cookies.accessToken;
+    const LoggedInState = Boolean(localStorage.getItem("IsLoggedIn"));
+    const LoggedInUsername = localStorage.getItem("IsLoggedIn_Username");
 
-    if (accessToken) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
+    if (LoggedInState && LoggedInUsername) {
+      setIsLoggedIn(LoggedInState);
+      setUsername(LoggedInUsername);
     }
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      setIsLoggedIn(true);
-    };
-    window.addEventListener("message", handleMessage);
-
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, []);
+  }, [MakeVarLoggedIn]);
 
   const handleLogout = () => {
-    // 필요한 로그아웃 작업 수행
-
-    // 1. 쿠키 삭제
-    destroyCookie(null, "accessToken");
-
-    // 2. 로컬 스토리지의 isLoggedIn 상태 변경
-    localStorage.removeItem("isLoggedIn");
-
-    // 3. 필요한 추가 작업 수행 (예: 서버 요청 등)
-
-    // 로그아웃 후 리디렉션 또는 다른 작업 수행
+    logoutState();
     router.push("/");
     window.location.reload();
   };
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
   return (
     <nav>
       <ul>
@@ -91,7 +57,12 @@ const Navbar = () => {
               {isMenuOpen && (
                 <ul>
                   <li>
-                    <Link href="/user/profile">Profile</Link>
+                    <Link
+                      href="/profile/@username"
+                      as={`/profile/@${username}`}
+                    >
+                      Profile
+                    </Link>
                   </li>
                   <li>
                     <Link href="/user/library">Library</Link>

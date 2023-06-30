@@ -4,15 +4,13 @@ const UserFragment = gql`
   fragment UserFields on User {
     id
     username
-    userEmail
-    verified
-    role
+    email
   }
 `;
 
-export const Get_User_Query = gql`
-  query GetUser {
-    user {
+export const GET_USER_QUERY = gql`
+  query Get_User {
+    GetUser {
       ...UserFields
     }
   }

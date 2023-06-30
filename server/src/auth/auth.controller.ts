@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Headers,
   Post,
@@ -11,7 +12,7 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private authService: AuthService) {}
   @Post('/refresh_token')
-  async renewToken(@Headers('authorization') userEmail: string) {
+  async renewToken(@Body() userEmail: string) {
     try {
       const newAccessToken = await this.authService.RefreshAccessToken(
         userEmail,

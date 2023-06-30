@@ -23,6 +23,7 @@ export interface LoginVariables {
 
 export interface LoginOutput {
   userEmail: string;
+  username: string;
   accessToken: string;
   isLoggedIn: boolean;
 }

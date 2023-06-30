@@ -29,6 +29,10 @@ export class LoginOutput {
   @Field((type) => String)
   userEmail: string;
 
+  @IsString()
+  @Field((type) => String)
+  username: string;
+
   @IsBoolean()
   @Field((type) => Boolean)
   isLoggedIn: boolean;

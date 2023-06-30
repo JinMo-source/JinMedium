@@ -1,6 +1,6 @@
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
@@ -14,12 +14,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any): Promise<any> {
     // 토큰에서 추출된 정보로 사용자를 인증하고 반환합니다.
-    const isValid = await this.authService.validateUserByEmail(
-      payload.userEmail,
-    );
-    if (!isValid) {
-      throw new UnauthorizedException('Invalid token');
-    }
+
+    return await this.authService.validateUserByEmail(payload.userEmail);
   }
 }
 

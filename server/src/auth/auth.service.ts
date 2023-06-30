@@ -37,6 +37,7 @@ export class AuthService {
 
   async validateUserByEmail(userEmail: string): Promise<User | null> {
     const user = await this.userService.findByEmail(userEmail);
+    console.log(user);
     if (user) {
       return user;
     }
@@ -69,6 +70,7 @@ export class AuthService {
       await this.userEntity.findOne({ where: { id: user.id } });
       return {
         userEmail: user.email,
+        username: user.username,
         isLoggedIn: true,
         accessToken,
       };

@@ -3,12 +3,13 @@ import { setCookie } from "nookies";
 import { useState } from "react";
 import { LoginVariablesOutput, LoginVariables } from "@/userInterface";
 import { useRouter } from "next/router";
-import { isLoggedInVar } from "@/until/apollo";
+import { isLoggedInVar, loginState } from "@/until/apollo";
 
 const VALIDATEUSER = gql`
   mutation validateUser($input: ValidateUser!) {
     validateUser(input: $input) {
       isLoggedIn
+      username
       userEmail
       accessToken
     }
@@ -38,21 +39,14 @@ export default function Login() {
 
       const validateUser = data!.validateUser;
 
-      const { userEmail, isLoggedIn, accessToken } = validateUser;
+      const { userEmail, username, isLoggedIn, accessToken } = validateUser;
 
       localStorage.setItem("IsLoggedIn", `${isLoggedIn}`);
       localStorage.setItem("IsLoggedIn_Email", userEmail);
 
-      isLoggedInVar(true);
+      loginState({ isLoggedIn, username, userEmail, accessToken });
 
       if (accessToken) {
-        const maxAgeInSeconds = 90000;
-        setCookie(null, "accessToken", accessToken, {
-          maxAge: maxAgeInSeconds, // 쿠키의 유효 기간 (예: 30일)
-          path: "/", // 쿠키의 유효 경로
-          secure: true, // HTTPS에서만 쿠키 전송
-          sameSite: "strict", // SameSite 설정
-        });
       }
       router.push("/");
     } catch (error) {

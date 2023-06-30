@@ -1,12 +1,7 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { User } from '../users/entities/User.entity';
 import { AuthService } from './auth.service';
-import {
-  RefreshTokenInput,
-  RefreshTokenOutput,
-  ValidateUser,
-  LoginOutput,
-} from './dto/validateUser.dto';
+import { ValidateUser, LoginOutput } from './dto/validateUser.dto';
 import { CurrentUser } from './current-user.decorator';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from './gql-auth.guard';
@@ -21,11 +16,12 @@ export class AuthResolver {
   ): Promise<LoginOutput> {
     const user = await this.authService.validateUser(validateUser);
     if (user) {
-      const { userEmail, isLoggedIn, accessToken } =
+      const { userEmail, username, isLoggedIn, accessToken } =
         await this.authService.login(validateUser);
 
       return {
         userEmail,
+        username,
         isLoggedIn,
         accessToken,
       };

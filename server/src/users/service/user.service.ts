@@ -54,9 +54,9 @@ export class UserService {
     }
   }
 
-  async findById(id: number): Promise<User | null> {
+  async findById(userId: number): Promise<User | null> {
     try {
-      const user = await this.userRepository.findOne({ where: { id } });
+      const user = await this.userRepository.findOne({ where: { id: userId } });
       return user || null;
     } catch (error) {
       console.log(error);

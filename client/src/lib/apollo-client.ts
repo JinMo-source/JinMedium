@@ -37,18 +37,22 @@ const tokenRefreshLink = new TokenRefreshLink({
     }
   },
   fetchAccessToken: async () => {
+    const cookies = parseCookies();
+    const accessToken = cookies.accessToken;
     const userEmail = localStorage.getItem("IsLoggedIn_Email");
     const response = await fetch("http://localhost:4000/auth/refresh_token", {
       method: "POST",
       credentials: "include",
       headers: {
         // 리프레시 토큰을 헤더에 추가하여 서버로 전송
-        Authorization: `${userEmail}`,
+        Authorization: `${accessToken}`,
       },
     });
+    console.log(response);
     return response;
   },
   handleFetch: (accessToken) => {
+    console.log(accessToken);
     const maxAgeInSeconds = 90000;
     setCookie(null, "accessToken", accessToken, {
       maxAge: maxAgeInSeconds, // 쿠키의 유효 기간 (예: 30일)
