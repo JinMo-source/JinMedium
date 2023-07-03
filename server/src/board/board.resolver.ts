@@ -7,16 +7,17 @@ import { User } from 'src/users/entities/User.entity';
 import { GqlAuthGuard } from 'src/auth/gql-auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/current-user.decorator';
+import { GetRecentBoard, GetRecentCombinedBoard } from './dto/getboard.dto';
 
 @Resolver((of) => Board)
 export class BoardResolver {
   constructor(private readonly boardService: BoardService) {}
 
   @Query((returns) => [Board])
-  async getBoard(): Promise<Board[]> {
-    const GetBoards = await this.boardService.getBoards();
-    console.log(GetBoards);
-    return GetBoards;
+  async GetRecentBoard(): Promise<GetRecentBoard | GetRecentCombinedBoard> {
+    const GetRecentBoard = await this.boardService.getRecentBoard();
+    const GetRecentCombinedBoard = await this.boardService.getRecentBoard();
+    return GetRecentBoard | GetRecentCombinedBoard;
   }
 
   @Mutation((returns) => BoardOutput)
