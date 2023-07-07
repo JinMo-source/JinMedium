@@ -9,18 +9,11 @@ import { UseGuards } from '@nestjs/common';
 import { CurrentUser } from 'src/auth/current-user.decorator';
 import { GetRecentBoard, GetRecentCombinedBoard } from './dto/getboard.dto';
 
-@Resolver((of) => Board)
+@Resolver(() => Board)
 export class BoardResolver {
   constructor(private readonly boardService: BoardService) {}
 
-  @Query((returns) => [Board])
-  async GetRecentBoard(): Promise<GetRecentBoard | GetRecentCombinedBoard> {
-    const GetRecentBoard = await this.boardService.getRecentBoard();
-    const GetRecentCombinedBoard = await this.boardService.getRecentBoard();
-    return GetRecentBoard | GetRecentCombinedBoard;
-  }
-
-  @Mutation((returns) => BoardOutput)
+  @Mutation(() => BoardOutput)
   @UseGuards(GqlAuthGuard) // GraphQL 요청에 대해 인증을 검사하는 Guard 적용
   async CreateBoard(
     @Args('input') operationInput: OperationInput,
@@ -51,28 +44,15 @@ export class BoardResolver {
     }
   }
 
-  // @Query((returns) => Board)
-  // async BoardFetchByDataId(
-  //   @Args('ID') fetchDataById: FetchDataById,
-  // ): Promise<Board> {
-  //   const FetchId = await this.boardService.BoardFetchByDataId(fetchDataById);
-  //   console.log(FetchId);
-  //   return FetchId;
-  // }
+  @Query(() => [GetRecentBoard])
+  async GetRecentBoard(): Promise<GetRecentBoard> {
+    const GetRecentBoard = await this.boardService.getRecentBoard();
+    // const GetRecentCombinedBoard =
+    //   await this.boardService.getRecentCombinedBoard();
 
-  // @Mutation((returns) => BoardOutput)
-  // // async EditBoard(@Args('input') boardInput: BoardInput): Promise<BoardOutput> {
-  // //   const Edit = await this.boardService.EditBoard(boardInput);
-  // //   console.log(Edit);
-  // //   return Edit;
-  // // }
-
-  // @Mutation((returns) => BoardOutput)
-  // async DeleteBoard(
-  //   @Args('ID') fetchDataById: FetchDataById,
-  // ): Promise<BoardOutput> {
-  //   const Delete_board = await this.boardService.DeleteBoard(fetchDataById);
-  //   console.log(Delete_board);
-  //   return Delete_board;
-  // }
+    return {
+      content: 'dsvds',
+      createAt: 'asdvadsv',
+    };
+  }
 }

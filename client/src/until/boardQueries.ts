@@ -1,5 +1,25 @@
 import { gql } from "@apollo/client";
 
+export const GET_INITIAL_DATA = gql`
+  query GetInitialData {
+    GetRecentBoard {
+      content
+    }
+
+    # combinedBoards {
+    #   id
+    #   title
+    #   // CombinedBoard에 필요한 다른 필드들을 여기에 추가합니다.
+    # }
+
+    # users {
+    #   id
+    #   name
+    #   // User에 필요한 다른 필드들을 여기에 추가합니다.
+    # }
+  }
+`;
+
 const CombinedBoardFragment = gql`
   fragment CombiendBoardFields on CombinedBoard {
     title

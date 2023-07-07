@@ -1,6 +1,10 @@
-// import BoardList from "../components/board";
+import Board from "@/components/Board";
 import Link from "next/link";
 
 export default function home() {
-  return <div>{/* <BoardList />; */}</div>;
+  return (
+    <div>
+      <Board />
+    </div>
+  );
 }

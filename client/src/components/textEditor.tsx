@@ -9,7 +9,7 @@ import {
 } from "@/graphql/type/api";
 import { useState } from "react";
 import "react-quill/dist/quill.snow.css";
-import CombinedBoard from "./combinedBoard";
+import CombinedBoard from "./CombinedBoard";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
   ssr: false,

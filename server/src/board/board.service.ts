@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BoardOutput, Operation } from './dto/board.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { v4 as uuidv4 } from 'uuid';
+import { CombinedBoard } from 'src/combined_board/dto/combined_board.dto';
+import { GetRecentBoard } from './dto/getboard.dto';
 
 @Injectable()
 export class BoardService {
@@ -12,12 +14,11 @@ export class BoardService {
     @InjectRepository(Board)
     private boardRepository: Repository<Board>,
 
+    @InjectRepository(CombinedBoard)
+    private combinedBoardRepository: Repository<CombinedBoard>,
+
     private readonly eventEmitter: EventEmitter2,
   ) {}
-
-  async getBoards(): Promise<Board[]> {
-    return this.boardRepository.find();
-  }
 
   async CreateBoard(
     boardTitle: string,
@@ -92,4 +93,15 @@ export class BoardService {
       };
     }
   }
+
+  async getRecentBoard(): Promise<GetRecentBoard> {
+    const getBoard = await this.boardRepository.find({
+      relations: ['combinedBoard'],
+    });
+    console.log(getBoard);
+    return;
+  }
+  // async getRecentCombinedBoard(): Promise<CombinedBoard[]> {
+  //   return this.combinedBoardRepository.find();
+  // }
 }
