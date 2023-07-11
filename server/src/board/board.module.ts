@@ -4,10 +4,10 @@ import { BoardService } from './board.service';
 import { Board } from './entities/board.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BoardGateway } from 'src/websocket/websocket';
-import { CombinedBoard } from 'src/combined_board/dto/combined_board.dto';
+import { CombinedBoardEntity } from 'src/combined_board/entities/combined_board.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Board, CombinedBoard])],
+  imports: [TypeOrmModule.forFeature([Board, CombinedBoardEntity])],
   providers: [BoardResolver, BoardService, BoardGateway],
   exports: [BoardService],
 })

@@ -45,14 +45,9 @@ export class BoardResolver {
   }
 
   @Query(() => [GetRecentBoard])
-  async GetRecentBoard(): Promise<GetRecentBoard> {
+  async GetRecentBoard(): Promise<any> {
     const GetRecentBoard = await this.boardService.getRecentBoard();
-    // const GetRecentCombinedBoard =
-    //   await this.boardService.getRecentCombinedBoard();
-
-    return {
-      content: 'dsvds',
-      createAt: 'asdvadsv',
-    };
+    console.log(GetRecentBoard);
+    return GetRecentBoard;
   }
 }
